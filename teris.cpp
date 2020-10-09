@@ -1,10 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/*------------shared function--------------*/
 void read_file(char *, char *, char *, fstream *);
 int string_to_int(const char *);
 void game_over();
 
+/*-----------------class-------------------*/
 class GameBoard{
     private:
         int row, col;
@@ -31,24 +33,63 @@ class GameBoard{
                     cout<<gameboard[i][j];
                 }
         }
+        void seclect_block(int shape){
+            switch(shape){
+                case(73):{ //I
+                    cout<<"select I"<<endl;
+                    break;
+                }
+                case(74):{ //J
+                    cout<<"select J"<<endl;
+                    break;
+                }
+                case(76):{ //L
+                    cout<<"select L"<<endl;
+                    break;
+                } 
+                case(79):{ //O
+                    cout<<"select O"<<endl;
+                    break;
+                }
+                case(83):{ //S
+                    cout<<"select S"<<endl;
+                    break;
+                }
+                case(84):{ //T
+                    cout<<"select T"<<endl;
+                    break;
+                }
+                case(90):{ //Z
+                    cout<<"select Z"<<endl;
+                    break;
+                }
+                default:
+                    game_over();
+            }
+        }
 };
 
+/*---------------main function-----------------*/
 int main(){
     char row[2], col[5], shape[3], pos1[4], pos2[4];
+
+    //load in a test case
     string filename= "1.data";
     fstream ifile(filename, ios::in);
 
     //get the size of the game board
     ifile.getline(row, sizeof(row), ' ');
     ifile.getline(col, sizeof(col), '\n');
-    int ro= string_to_int(row);
-    int co= string_to_int(col);
-    GameBoard gameboard(ro, co);
+    int rowi= string_to_int(row);
+    int coli= string_to_int(col);
+    GameBoard gameboard(rowi, coli);
+
     // gameboard.print_game_board();
-
-
     while(!ifile.eof()){
         read_file(shape, pos1, pos2, &ifile);
+        int pos1i= string_to_int(pos1);
+        int pos2i= string_to_int(pos2);
+        gameboard.seclect_block(shape[0]);
     }
     ifile.close();
     return 0;
@@ -64,6 +105,10 @@ void read_file(char *shape, char *pos1, char *pos2, fstream *ifile){
     }
 }
 
+
+
+
+/*------------shared function--------------*/
 int string_to_int(const char *word){
     int number= 0;
     while(*word){
