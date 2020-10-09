@@ -3,6 +3,8 @@ using namespace std;
 
 /*------------shared variable--------------*/
 typedef vector<int> Col;
+typedef map<int, int> Map;
+typedef pair<int, int> Pair;
 int isend= 0;
 /*------------shared function--------------*/
 void read_file(char *, char *, char *, fstream *);
@@ -53,12 +55,12 @@ class Table{
             for(int i= 0; i<col; i++){
                 nonzerotable[i].emplace_back(-1);
             }
-            for (int i= 0; i<col; i++)
-            {
-                for (auto j: nonzerotable[i])
-                    std::cout << j << " ";
-                std::cout << '\n';
-            }
+            // for (int i= 0; i<col; i++)
+            // {
+            //     for (auto j: nonzerotable[i])
+            //         std::cout << j << " ";
+            //     std::cout << '\n';
+            // }
         }
         void update_nonzerotable(){
         }
@@ -77,8 +79,12 @@ class Block: public GameBoard{
         Block(int x1, int x2, int y1, char *shape): pos1(x1), pos2(x2), bottom1(y1), kind(shape){
         }
   
-        void check_is_hit(){
-
+        Map check_is_hit(){
+            Map hitset;
+            for(int i= 0; i<= pos2; i++){
+                hitset.insert(Pair(pos1+i, bottom1));
+            }
+            return hitset;
         }
         void assign_to_gameboard(){}
 };
@@ -108,9 +114,12 @@ int main(){
             break;
         read_file(shape, pos1, pos2, &ifile);
         int pos1i= string_to_int(pos1)-1;
-        int pos2i= string_to_int(pos2)-1;
+        int pos2i= string_to_int(pos2);
         int bottom1= table.get_bottom(pos1i);
         Block block(pos1i, pos2i, bottom1, shape);
+        Map hitset= block.check_is_hit();
+        // for(auto &it: hitset)
+        //     cout<<"("<<it.first<<","<<it.second<<")"<<endl;
     }
     ifile.close();
     return 0;
@@ -130,10 +139,20 @@ void read_file(char *shape, char *pos1, char *pos2, fstream *ifile){
 
 int string_to_int(const char *word){
     int number= 0;
+    int isminor= 0;
     while(*word){
-        if((*word)<=47);
+        if((*word)<=47&&(*word)!=45);
         else{
-            number= (number*10)+ (*word-'0');
+            if(*word==45){
+                isminor= 1;
+            }
+            else{
+                number= (number*10)+ (*word-'0');
+                if(isminor){
+                    number= number*(-1);
+                    isminor= 0;
+                }
+            }
         }
         word++;
     }
