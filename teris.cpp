@@ -68,7 +68,21 @@ class Table{
             int end= nonzerotable[pos1].size()-1;
             return nonzerotable[pos1][end]+1;
         }
-  
+        int check_ishit(Map hitset){
+            for(auto &it: hitset){
+                for(auto i: nonzerotable[it.second])
+                {
+                    if(i==it.first){
+                        cout<<"("<<it.first<<", "<<it.second<<")"<<endl;
+                        return 1;
+                    }
+                    else{
+                        continue;
+                    }
+                }
+            }
+            return 0;
+        }  
 };
 
 class Block: public GameBoard{
@@ -79,19 +93,19 @@ class Block: public GameBoard{
         Block(int x1, int x2, int y1, char *shape): pos1(x1), pos2(x2), bottom1(y1), kind(shape){
         }
   
-        Map check_is_hit(){
+        Map create_hitset(){
             Map hitset;
-            if(pos2>=0){
-                for(int i= 0; i<= pos2; i++){
-                    hitset.insert(Pair(pos1+i, bottom1));
+                if(pos2>=0){
+                    for(int i= 0; i<= pos2; i++){
+                        hitset.insert(Pair(pos1+i, bottom1));
+                    }
                 }
-            }
-            else{
-                for(int i= 0; i<= ((-1)*pos2); i++){
-                    hitset.insert(Pair(pos1-i, bottom1));
+                else{
+                    for(int i= 0; i<= ((-1)*pos2); i++){
+                        hitset.insert(Pair(pos1-i, bottom1));
+                    }
                 }
-            }
-            return hitset;
+            return hitset;   
         }
         void assign_to_gameboard(){}
 };
@@ -122,9 +136,13 @@ int main(){
         read_file(shape, pos1, pos2, &ifile);
         int pos1i= string_to_int(pos1)-1;
         int pos2i= string_to_int(pos2);
+        if((pos1i+pos2i)>coli||(pos1i+pos2i)<0)
+            break;
         int bottom1= table.get_bottom(pos1i);
         Block block(pos1i, pos2i, bottom1, shape);
-        Map hitset= block.check_is_hit();
+        Map hitset= block.create_hitset();
+        isend= table.check_ishit(hitset);
+        cout<<isend<<endl;
     }
     ifile.close();
     return 0;
