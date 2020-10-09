@@ -3,6 +3,7 @@ using namespace std;
 
 /*------------shared function--------------*/
 void read_file(char *, char *, char *, fstream *);
+void game_over();
 
 /*-----------------class-------------------*/
 class GameBoard{
@@ -44,8 +45,6 @@ int main(){
     //get the size of the game board
     ifile.getline(row, sizeof(row), ' ');
     ifile.getline(col, sizeof(col), '\n');
-
-    // gameboard.print_game_board();
     while(!ifile.eof()){
         read_file(shape, pos1, pos2, &ifile);
     }
@@ -53,6 +52,8 @@ int main(){
     return 0;
 }
 
+
+/*------------shared function--------------*/
 void read_file(char *shape, char *pos1, char *pos2, fstream *ifile){
     (*ifile).getline(shape, sizeof(shape), ' ');
     if(shape[0]== 69);
@@ -61,4 +62,8 @@ void read_file(char *shape, char *pos1, char *pos2, fstream *ifile){
         (*ifile).getline(pos1, sizeof(pos1), ' ');
         (*ifile).getline(pos2, sizeof(pos2), '\n');
     }
+}
+
+void game_over(){
+    cout<<"---------------GAME OVER------------------"<<endl;
 }
