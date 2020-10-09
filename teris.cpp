@@ -3,6 +3,7 @@ using namespace std;
 
 /*------------shared function--------------*/
 void read_file(char *, char *, char *, fstream *);
+int string_to_int(const char *);
 void game_over();
 
 /*-----------------class-------------------*/
@@ -45,8 +46,16 @@ int main(){
     //get the size of the game board
     ifile.getline(row, sizeof(row), ' ');
     ifile.getline(col, sizeof(col), '\n');
+    int rowi= string_to_int(row);
+    int coli= string_to_int(col);
+    GameBoard gameboard(rowi, coli);
+    // gameboard.print_game_board();
+
+    //load in a test case
     while(!ifile.eof()){
         read_file(shape, pos1, pos2, &ifile);
+        int pos1i= string_to_int(pos1);
+        int pos2i= string_to_int(pos2);
     }
     ifile.close();
     return 0;
@@ -62,6 +71,18 @@ void read_file(char *shape, char *pos1, char *pos2, fstream *ifile){
         (*ifile).getline(pos1, sizeof(pos1), ' ');
         (*ifile).getline(pos2, sizeof(pos2), '\n');
     }
+}
+
+int string_to_int(const char *word){
+    int number= 0;
+    while(*word){
+        if((*word)<=47);
+        else{
+            number= (number*10)+ (*word-'0');
+        }
+        word++;
+    }
+    return number;
 }
 
 void game_over(){
