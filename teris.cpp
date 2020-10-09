@@ -76,6 +76,7 @@ class Block: public GameBoard{
     public:
         Block(int x1, int x2, int y1, char *shape): pos1(x1), pos2(x2), bottom1(y1), kind(shape){
         }
+  
         void check_is_hit(){
 
         }
