@@ -2,7 +2,7 @@
 using namespace std;
 
 /*------------shared variable--------------*/
-typedef vector<int> Row;
+typedef vector<int> Col;
 int isend= 0;
 /*------------shared function--------------*/
 void read_file(char *, char *, char *, fstream *);
@@ -14,7 +14,6 @@ class GameBoard{
     protected:
         int row, col;
         int **gameboard;
-        vector<Row> *nonzerotable, bombtable;
     public:
         GameBoard(int n, int m): row(n), col(m){
             gameboard= new_gameboard(row, col);
@@ -43,16 +42,35 @@ class GameBoard{
         }
 };
 
+class Table{
+    private:
+        int row, col;
+        vector<Col> nonzerotable, bombtable;
+    public:
+        Table(int n, int m): row(n), col(m){
+            nonzerotable.reserve(col);
+            for(int i= 0; i<col; i++){
+                nonzerotable[i].emplace_back(0);
+            }
+            for (int i= 0; i<col; i++)
+            {
+                for (auto j: nonzerotable[i])
+                    std::cout << j << " ";
+                std::cout << '\n';
+            }
+        }
+        // int get_bottom(int pos1){}
+  
+};
+
 class Block: public GameBoard{
     private:
-        int pos1, pos2;
-        int hight1;
-        int hight2;
+        int pos1, pos2, bottom1;
         char *kind;
     public:
-        Block(int x1, int x2, char *shape): pos1(x1), pos2(x2), hight1(0), hight2(0), kind(shape){
+        Block(int x1, int x2, char *shape): pos1(x1), pos2(x2), kind(shape){
         }
-        void check_hight1(){
+        void check_is_hit(){
             int dir= kind[1]-'0';
             switch(kind[0]){
                 case(73):{ //I
@@ -178,7 +196,8 @@ int main(){
     int rowi= string_to_int(row);
     int coli= string_to_int(col);
     GameBoard gameboard(rowi, coli);
-    gameboard.print_gameboard();
+    Table table(rowi, coli);
+    // gameboard.print_gameboard();
 
     //load in a test case
     while(!ifile.eof()){
