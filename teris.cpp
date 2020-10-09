@@ -30,8 +30,17 @@ class GameBoard{
 };
 
 int main(){
-    int row, col;
-    cin>>row>>col;
-    GameBoard gameboard(row, col);
-    gameboard.print_game_board();
+    char row[3], col[3], shape[4];
+    int i= 0;
+    fstream ifile("1.data", ios::in);
+    ifile.getline(row, sizeof(row), ' ');
+    ifile.getline(col, sizeof(col), '\n');
+    if(!ifile.eof()){
+        ifile.getline(shape, sizeof(shape), ' ');
+    }
+    cout<<row<<endl;
+    cout<<col<<endl;
+    cout<<shape<<endl;
+    ifile.close();
+    return 0;
 }
