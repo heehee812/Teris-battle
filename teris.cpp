@@ -3,6 +3,7 @@ using namespace std;
 
 void read_file(char *, char *, char *, fstream *);
 int string_to_int(const char *);
+void game_over();
 
 class GameBoard{
     private:
@@ -55,8 +56,12 @@ int main(){
 
 void read_file(char *shape, char *pos1, char *pos2, fstream *ifile){
     (*ifile).getline(shape, sizeof(shape), ' ');
-    (*ifile).getline(pos1, sizeof(pos1), ' ');
-    (*ifile).getline(pos2, sizeof(pos2), '\n');
+    if(shape[0]== 69)
+        game_over();
+    else{
+        (*ifile).getline(pos1, sizeof(pos1), ' ');
+        (*ifile).getline(pos2, sizeof(pos2), '\n');
+    }
 }
 
 int string_to_int(const char *word){
@@ -69,4 +74,8 @@ int string_to_int(const char *word){
         word++;
     }
     return number;
+}
+
+void game_over(){
+    cout<<"---------------GAME OVER------------------"<<endl;
 }
