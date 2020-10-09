@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+void read_file(char *, char *, char *, fstream *);
+int string_to_int(const char *);
+
 class GameBoard{
     private:
         int row, col;
@@ -30,17 +33,40 @@ class GameBoard{
 };
 
 int main(){
-    char row[3], col[3], shape[4];
-    int i= 0;
-    fstream ifile("1.data", ios::in);
+    char row[2], col[5], shape[3], pos1[4], pos2[4];
+    string filename= "1.data";
+    fstream ifile(filename, ios::in);
+
+    //get the size of the game board
     ifile.getline(row, sizeof(row), ' ');
     ifile.getline(col, sizeof(col), '\n');
-    if(!ifile.eof()){
-        ifile.getline(shape, sizeof(shape), ' ');
-    }
-    cout<<row<<endl;
-    cout<<col<<endl;
-    cout<<shape<<endl;
+    // GameBoard gameboard(row, col);
+    // cout<<row<<endl;
+    int ro= string_to_int(row);
+    // cout<<ro;
+    // while(!ifile.eof()){
+    //     read_file(shape, pos1, pos2, &ifile);
+    // }
     ifile.close();
     return 0;
+}
+
+void read_file(char *shape, char *pos1, char *pos2, fstream *ifile){
+    (*ifile).getline(shape, sizeof(shape), ' ');
+    (*ifile).getline(pos1, sizeof(pos1), ' ');
+    (*ifile).getline(pos2, sizeof(pos2), '\n');
+}
+
+int string_to_int(const char *word){
+    int number= 0;
+    while(*word){
+        if((*word)<=47)
+            continue;
+        else{
+            number= (number*10)+ (*word-'0');
+        }
+        word++;
+    }
+    cout<<number<<endl;
+    return number;
 }
