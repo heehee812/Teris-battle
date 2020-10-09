@@ -40,13 +40,15 @@ int main(){
     //get the size of the game board
     ifile.getline(row, sizeof(row), ' ');
     ifile.getline(col, sizeof(col), '\n');
-    // GameBoard gameboard(row, col);
-    // cout<<row<<endl;
     int ro= string_to_int(row);
-    // cout<<ro;
-    // while(!ifile.eof()){
-    //     read_file(shape, pos1, pos2, &ifile);
-    // }
+    int co= string_to_int(col);
+    GameBoard gameboard(ro, co);
+    // gameboard.print_game_board();
+
+
+    while(!ifile.eof()){
+        read_file(shape, pos1, pos2, &ifile);
+    }
     ifile.close();
     return 0;
 }
@@ -60,13 +62,11 @@ void read_file(char *shape, char *pos1, char *pos2, fstream *ifile){
 int string_to_int(const char *word){
     int number= 0;
     while(*word){
-        if((*word)<=47)
-            continue;
+        if((*word)<=47);
         else{
             number= (number*10)+ (*word-'0');
         }
         word++;
     }
-    cout<<number<<endl;
     return number;
 }
