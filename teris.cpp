@@ -74,114 +74,10 @@ class Block: public GameBoard{
         int pos1, pos2, bottom1;
         char *kind;
     public:
-        Block(int x1, int x2, char *shape): pos1(x1), pos2(x2), kind(shape){
+        Block(int x1, int x2, int y1, char *shape): pos1(x1), pos2(x2), bottom1(y1), kind(shape){
         }
         void check_is_hit(){
-            int dir= kind[1]-'0';
-            switch(kind[0]){
-                case(73):{ //I
-                    switch(dir){
-                        case(1):{
-                            break;
-                        }
-                        case(2):{
-                            break;
-                        }
-                        default:
-                            game_over(1);
-                    }
-                    break;
-                }
-                case(74):{ //J
-                    switch(dir){
-                        case(1):{
-                            break;
-                        }
-                        case(2):{
-                            break;
-                        }
-                        case(3):{
-                            break;
-                        }
-                        case(4):{
-                            break;
-                        }
-                        default:
-                            game_over(1);
-                    }
-                    break;
-                }
-                case(76):{ //L
-                    switch(dir){
-                        case(1):{
-                            break;
-                        }
-                        case(2):{
-                            break;
-                        }
-                        case(3):{
-                            break;
-                        }
-                        case(4):{
-                            break;
-                        }
-                        default:
-                            game_over(1);
-                    }
-                    break;
-                } 
-                case(79):{ //O
-                    break;
-                }
-                case(83):{ //S
-                    switch(dir){
-                        case(1):{
-                            break;
-                        }
-                        case(2):{
-                            break;
-                        }
-                        default:
-                            game_over(1);
-                    }
-                    break;
-                }
-                case(84):{ //T
-                    switch(dir){
-                        case(1):{
-                            break;
-                        }
-                        case(2):{
-                            break;
-                        }
-                        case(3):{
-                            break;
-                        }
-                        case(4):{
-                            break;
-                        }
-                        default:
-                            game_over(1);
-                    }
-                    break;
-                }
-                case(90):{ //Z
-                    switch(dir){
-                        case(1):{
-                            break;
-                        }
-                        case(2):{
-                            break;
-                        }
-                        default:
-                            game_over(1);
-                    }
-                    break;
-                }
-                default:{
-                    game_over(1);
-                }
-            }
+
         }
         void assign_to_gameboard(){}
 };
@@ -210,9 +106,10 @@ int main(){
         if(isend)
             break;
         read_file(shape, pos1, pos2, &ifile);
-        int pos1i= string_to_int(pos1);
-        int pos2i= string_to_int(pos2);
-        Block block(pos1i, pos2i, shape);
+        int pos1i= string_to_int(pos1)-1;
+        int pos2i= string_to_int(pos2)-1;
+        int bottom1= table.get_bottom(pos1i);
+        Block block(pos1i, pos2i, bottom1, shape);
     }
     ifile.close();
     return 0;
