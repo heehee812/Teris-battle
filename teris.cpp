@@ -81,8 +81,15 @@ class Block: public GameBoard{
   
         Map check_is_hit(){
             Map hitset;
-            for(int i= 0; i<= pos2; i++){
-                hitset.insert(Pair(pos1+i, bottom1));
+            if(pos2>=0){
+                for(int i= 0; i<= pos2; i++){
+                    hitset.insert(Pair(pos1+i, bottom1));
+                }
+            }
+            else{
+                for(int i= 0; i<= ((-1)*pos2); i++){
+                    hitset.insert(Pair(pos1-i, bottom1));
+                }
             }
             return hitset;
         }
@@ -118,8 +125,6 @@ int main(){
         int bottom1= table.get_bottom(pos1i);
         Block block(pos1i, pos2i, bottom1, shape);
         Map hitset= block.check_is_hit();
-        // for(auto &it: hitset)
-        //     cout<<"("<<it.first<<","<<it.second<<")"<<endl;
     }
     ifile.close();
     return 0;
