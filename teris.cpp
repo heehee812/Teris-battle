@@ -76,6 +76,7 @@ class Block: public GameBoard{
     public:
         Block(int x1, int x2, char *shape): pos1(x1), pos2(x2), kind(shape){
         }
+  
         void check_is_hit(){
             int dir= kind[1]-'0';
             switch(kind[0]){
