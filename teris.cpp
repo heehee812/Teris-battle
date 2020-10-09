@@ -16,6 +16,7 @@ class GameBoard{
         int **gameboard;
     public:
         GameBoard(int n, int m): row(n), col(m){
+            cout<<"---------------Start------------------"<<endl;
             gameboard= new_gameboard(row, col);
         }
         GameBoard(){}
@@ -50,7 +51,7 @@ class Table{
         Table(int n, int m): row(n), col(m){
             nonzerotable.reserve(col);
             for(int i= 0; i<col; i++){
-                nonzerotable[i].emplace_back(0);
+                nonzerotable[i].emplace_back(-1);
             }
             for (int i= 0; i<col; i++)
             {
@@ -59,7 +60,12 @@ class Table{
                 std::cout << '\n';
             }
         }
-        // int get_bottom(int pos1){}
+        void update_nonzerotable(){
+        }
+        int get_bottom(int pos1){
+            int end= nonzerotable[pos1].size()-1;
+            return nonzerotable[pos1][end]+1;
+        }
   
 };
 
