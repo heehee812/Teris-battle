@@ -99,6 +99,9 @@ class Table{
                 std::cout << '\n';
             }
         } 
+        void sort_table(int sortrow){
+            sort(nonzerotable[sortrow].begin(), nonzerotable[sortrow].end());
+        }
 };
 
 /*---------------main function-----------------*/
@@ -824,6 +827,9 @@ void Table::update_nonzerotable(Block block){
                 default:{
                     game_over(1);
                 }
+            }
+            for(int i= 0; i<col; i++){
+                sort_table(i);
             }
         }
 
