@@ -162,15 +162,15 @@ int main(){
                 game_over(1);
         }
 
-        //assign to gameboard and nonzerotable
+        //update gameboard, bombtable and nonzerotable
         table.update_table(block);
         table.check_isbomb();
-        gb.print_gameboard();
-        cout<<endl;
     }
     table.print_nonzerotable();
     cout<<endl;
     table.print_bombtable();
+    gb.print_gameboard();
+    cout<<endl;
     ifile.close();
     return 0;
 }
