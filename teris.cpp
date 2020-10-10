@@ -74,12 +74,6 @@ class Table{
             for(int i= 0; i<col; i++){
                 nonzerotable[i].emplace_back(-1);
             }
-            // for (int i= 0; i<col; i++)
-            // {
-            //     for (auto j: nonzerotable[i])
-            //         std::cout << j << " ";
-            //     std::cout << '\n';
-            // }
         }
         int get_bottom(int pos1){
             int end= nonzerotable[pos1].size()-1;
@@ -126,41 +120,34 @@ int main(){
 
     //load in a test case
     while(!ifile.eof()){
-        cout<<"---new start---"<<endl;
         if(isend)
             break;
         //load in block   
         read_file(shape, pos1, pos2, &ifile);
         int pos1i= string_to_int(pos1)-1;
         int pos2i= string_to_int(pos2);
-        // cout<<shape<<pos1i<<pos2i<<endl;
+
         //check if input invalid
         if((pos1i+pos2i)>coli||(pos1i+pos2i)<0)
             break;
 
         //check if hit
         int bottom1= table.get_bottom(pos1i);
-        // cout<<"bottom1: "<<bottom1<<endl;
         Block block(pos1i, pos2i, bottom1, shape);
         Map hitset= block.create_hitset();
-        cout<<"hitset: ";
-        for(auto &it: hitset)
-            cout<<"("<<it.first<<", "<<it.second<<")";
-        cout<<endl;
         if(!hitset.empty()){
             isend= table.check_ishit(hitset);
-            cout<<"result return: "<<isend<<endl;
             if(isend)
                 game_over(1);
         }
 
         //assign to gameboard and nonzerotable
         table.update_nonzerotable(block);
-        cout<<"nonzerotable: ";
-        table.print_nonzerotable();
-        cout<<endl;
         // gb.assign_block();
     }
+    cout<<"nonzerotable: "<<endl;
+    table.print_nonzerotable();
+    cout<<endl;
     ifile.close();
     return 0;
 }
@@ -554,9 +541,7 @@ Map Block:: create_hitset(){
                     } 
                     case(79):{ //O
                         for(int i=0; i<2; i++){
-                            cout<<"i= "<<i;
                             for(int j= 1; j<=(-pos2); j++){
-                                cout<<"pos1= "<<pos1<<", j= "<<j<<endl;
                                 hitset.insert(Pair(pos1-j, bottom1+i));
                             }
                         }
@@ -675,9 +660,7 @@ Map Block:: create_hitset(){
 void Table::update_nonzerotable(Block block){
             int pos= block.get_pos();
             int bottom2= get_bottom(pos);
-            cout<<"bottom2: "<<bottom2<<endl;
             char *kind= block.get_kind();
-            cout<<"kind: "<<kind<<endl;
             int dir= kind[1]-'0';
             switch(kind[0]){
                 case(73):{ //I
