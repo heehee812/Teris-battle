@@ -692,7 +692,7 @@ void Table::update_table(Block block){
                             for(int i=0; i<4; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
                                 ++bombtable[bottom2+i];
-                                gameboard[bottom2+i][pos]= 1;
+                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
                             }
                             break;
                         }
@@ -700,7 +700,7 @@ void Table::update_table(Block block){
                             for(int j= 0; j<4; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2);
                                 ++bombtable[bottom2];
-                                gameboard[bottom2][pos+j]= 1;
+                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
                             }
                             break;
                         }
@@ -716,44 +716,44 @@ void Table::update_table(Block block){
                             for(int i= 0; i<3; i++){
                                 nonzerotable[pos+1].emplace_back(bottom2+i);
                                 ++bombtable[bottom2+i];
-                                gameboard[bottom2+i][pos+1]= 1;
+                                gameboard[(row-1)-(bottom2+i)][pos+1]= 1;
                             }
                             nonzerotable[pos].emplace_back(bottom2);
                             ++bombtable[bottom2];
-                            gameboard[bottom2][pos]= 1;
+                            gameboard[(row-1)-(bottom2)][pos]= 1;
                             break;
                         }
                         case(2):{
                             for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2);
                                 ++bombtable[bottom2];
-                                gameboard[bottom2][pos+j]= 1;
+                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
                             }
                             nonzerotable[pos].emplace_back(bottom2+1);
                             ++bombtable[bottom2+1];
-                            gameboard[bottom2+1][pos]= 1;
+                            gameboard[(row-1)-(bottom2+1)][pos]= 1;
                             break;
                         }
                         case(3):{
                             for(int i= 0; i<3; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
                                 ++bombtable[bottom2+i];
-                                gameboard[bottom2+i][pos]= 1;
+                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
                             }
                             nonzerotable[pos+1].emplace_back(bottom2+2);
                             ++bombtable[bottom2+2];
-                            gameboard[bottom2+2][pos+1]= 1;
+                            gameboard[(row-1)-(bottom2+2)][pos+1]= 1;
                             break;
                         }
                         case(4):{
                             for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
                                 ++bombtable[bottom2+1];
-                                gameboard[bottom2+1][pos+j]= 1;
+                                gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
                             }
                             nonzerotable[pos+2].emplace_back(bottom2);
                             ++bombtable[bottom2];
-                            gameboard[bottom2][pos+2]= 1;
+                            gameboard[(row-1)-(bottom2)][pos+2]= 1;
                             break;
                         }
                         default:
@@ -767,44 +767,44 @@ void Table::update_table(Block block){
                             for(int i= 0; i<3; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
                                 ++bombtable[bottom2+i];
-                                gameboard[bottom2+i][pos]= 1;
+                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
                             }
                             nonzerotable[pos+1].emplace_back(bottom2);
                             ++bombtable[bottom2];
-                            gameboard[bottom2][pos+1]= 1;
+                            gameboard[(row-1)-(bottom2)][pos+1]= 1;
                             break;
                         }
                         case(2):{
                             for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
                                 ++bombtable[bottom2+1];
-                                gameboard[bottom2+1][pos+j]= 1;
+                                gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
                             }
                             nonzerotable[pos].emplace_back(bottom2);
                             ++bombtable[bottom2];
-                            gameboard[bottom2][pos]= 1;
+                            gameboard[(row-1)-(bottom2)][pos]= 1;
                             break;
                         }
                         case(3):{
                             for(int i= 0; i<3; i++){
                                 nonzerotable[pos+1].emplace_back(bottom2+i);
                                 ++bombtable[bottom2+i];
-                                gameboard[pos+1][bottom2+i]= 1;
+                                gameboard[(row-1)-(bottom2+i)][pos+1]= 1;
                             }
                             nonzerotable[pos].emplace_back(bottom2+2);
                             ++bombtable[bottom2+2];
-                            gameboard[bottom2+2][pos]= 1;
+                            gameboard[(row-1)-(bottom2+2)][pos]= 1;
                             break;
                         }
                         case(4):{
                             for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
                                 ++bombtable[bottom2+1];
-                                gameboard[bottom2+1][pos+j]= 1;
+                                gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
                             }
                             nonzerotable[pos+2].emplace_back(bottom2);
                             ++bombtable[bottom2];
-                            gameboard[bottom2][pos+2]= 1;
+                            gameboard[(row-1)-(bottom2)][pos+2]= 1;
                             break;
                         }
                         default:
@@ -817,7 +817,7 @@ void Table::update_table(Block block){
                         for(int j=0; j<2; j++){
                             nonzerotable[pos+j].emplace_back(bottom2+i);
                             ++bombtable[bottom2+i];
-                            gameboard[bottom2+i][pos+j]= 1;
+                            gameboard[(row-1)-(bottom2+i)][pos+j]= 1;
                         }
                     break;
                 }
@@ -829,8 +829,8 @@ void Table::update_table(Block block){
                                 nonzerotable[pos+1+j].emplace_back(bottom2+1);
                                 ++bombtable[bottom2];
                                 ++bombtable[bottom2+1];
-                                gameboard[bottom2][pos+j]= 1;
-                                gameboard[bottom2+1][pos+1+j]= 1;
+                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                                gameboard[(row-1)-(bottom2+1)][pos+1+j]= 1;
                             }
                             break;
                         }
@@ -840,8 +840,8 @@ void Table::update_table(Block block){
                                     nonzerotable[pos+1].emplace_back(bottom2+i);
                                     ++bombtable[bottom2+1+i];
                                     ++bombtable[bottom2+i];
-                                    gameboard[bottom2+1+i][pos]= 1;
-                                    gameboard[bottom2+i][pos+1]= 1;
+                                    gameboard[(row-1)-(bottom2+1+i)][pos]= 1;
+                                    gameboard[(row-1)-(bottom2+i)][pos+1]= 1;
                                 }
                             break;
                         }
@@ -856,44 +856,44 @@ void Table::update_table(Block block){
                             for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
                                 ++bombtable[bottom2+1];
-                                gameboard[bottom2+1][pos+j]= 1;
+                                gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
                                 }
                             nonzerotable[pos+1].emplace_back(bottom2);
                             ++bombtable[bottom2];
-                            gameboard[bottom2][pos+1]= 1;
+                            gameboard[(row-1)-(bottom2)][pos+1]= 1;
                             break;
                         }
                         case(2):{
                             for(int i= 0; i<3; i++){
                                 nonzerotable[pos+1].emplace_back(bottom2+i);
                                 ++bombtable[bottom2+i];
-                                gameboard[pos+1][bottom2+i]= 1;
+                                gameboard[(row-1)-(bottom2+i)][pos+1]= 1;
                             }
                             nonzerotable[pos].emplace_back(bottom2+1);
                             ++bombtable[bottom2+1];
-                            gameboard[bottom2+1][pos]= 1;
+                            gameboard[(row-1)-(bottom2+1)][pos]= 1;
                             break;
                         }
                         case(3):{
                             for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2);
                                 ++bombtable[bottom2];
-                                gameboard[bottom2][pos+j]= 1;
+                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
                             }
                             nonzerotable[pos+1].emplace_back(bottom2+1);
                             ++bombtable[bottom2+1];
-                            gameboard[bottom2+1][pos+1]= 1;
+                            gameboard[(row-1)-(bottom2+1)][pos+1]= 1;
                             break;
                         }
                         case(4):{
                             for(int i= 0; i<3; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
                                 ++bombtable[bottom2+i];
-                                gameboard[bottom2+i][pos]= 1;
+                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
                             }
                             nonzerotable[pos+1].emplace_back(bottom2+1);
                             ++bombtable[bottom2+1];
-                            gameboard[bottom2+1][pos+1]= 1;
+                            gameboard[(row-1)-(bottom2+1)][pos+1]= 1;
                             break;
                         }
                         default:
@@ -909,8 +909,8 @@ void Table::update_table(Block block){
                                 nonzerotable[pos+1+j].emplace_back(bottom2);
                                 ++bombtable[bottom2+1];
                                 ++bombtable[bottom2];
-                                gameboard[bottom2+1][pos+j]= 1;
-                                gameboard[bottom2][pos+1+j]= 1;
+                                gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                                gameboard[(row-1)-(bottom2)][pos+1+j]= 1;
                             }
                             break;
                         }
@@ -920,8 +920,8 @@ void Table::update_table(Block block){
                                 nonzerotable[pos+1].emplace_back(bottom2+1+i);
                                 ++bombtable[bottom2+i];
                                 ++bombtable[bottom2+1+i];
-                                gameboard[bottom2+i][pos]= 1;
-                                gameboard[bottom2+1+i][pos+1]= 1;
+                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                                gameboard[(row-1)-(bottom2+1+i)][pos+1]= 1;
                             }
                             break;
                         }
