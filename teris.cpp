@@ -99,6 +99,7 @@ class Table{
                 std::cout << '\n';
             }
         } 
+
         void sort_table(int sortrow){
             sort(nonzerotable[sortrow].begin(), nonzerotable[sortrow].end());
         }
