@@ -59,7 +59,7 @@ class Block{
 class Table{
     private:
         int row, col;
-        vector<Col> nonzerotable, gameboard;
+        vector<Col> nonzerotable, &gameboard;
         map<int, int> bombtable;
     public:
         Table(int n, int m, vector<Col> &gb): row(n), col(m), gameboard(gb){
@@ -138,44 +138,42 @@ int main(){
     int rowi= string_to_int(row);
     int coli= string_to_int(col);
     GameBoard gb(rowi, coli);
-    gb.print_gameboard();
-    // Table table(rowi, coli, gb.gameboard);
+    Table table(rowi, coli, gb.gameboard);
 
     //load in a test case
-    // while(!ifile.eof()){
-    //     if(isend)
-    //         break;
-    //     //load in block   
-    //     read_file(shape, pos1, pos2, &ifile);
-    //     int pos1i= string_to_int(pos1)-1;
-    //     int pos2i= string_to_int(pos2);
+    while(!ifile.eof()){
+        if(isend)
+            break;
+        //load in block   
+        read_file(shape, pos1, pos2, &ifile);
+        int pos1i= string_to_int(pos1)-1;
+        int pos2i= string_to_int(pos2);
 
-    //     //check if input invalid
-    //     if((pos1i+pos2i)>coli||(pos1i+pos2i)<0)
-    //         break;
-
+        //check if input invalid
+        if((pos1i+pos2i)>coli||(pos1i+pos2i)<0)
+            break;
         //check if hit
-        // int bottom1= table.get_bottom(pos1i);
-        // Block block(pos1i, pos2i, bottom1, shape);
-        // Map hitset= block.create_hitset();
-        // if(!hitset.empty()){
-        //     isend= table.check_ishit(hitset);
-        //     if(isend)
-        //         game_over(1);
-        // }
+        int bottom1= table.get_bottom(pos1i);
+        Block block(pos1i, pos2i, bottom1, shape);
+        Map hitset= block.create_hitset();
+        if(!hitset.empty()){
+            isend= table.check_ishit(hitset);
+            if(isend)
+                game_over(1);
+        }
 
         //update gameboard, bombtable and nonzerotable
-        // table.update_table(block);
-        // table.check_isbomb();
-    // }
-    // table.print_nonzerotable();
-    // cout<<endl;
-    // table.print_bombtable();
-    // cout<<endl;
-    // gb.print_gameboard();
-    // cout<<endl;
-    // ifile.close();
-    // return 0;
+        table.update_table(block);
+        table.check_isbomb();
+        gb.print_gameboard();
+        cout<<endl;
+    }
+    table.print_nonzerotable();
+    cout<<endl;
+    table.print_bombtable();
+    cout<<endl;
+    ifile.close();
+    return 0;
 }
 
 
