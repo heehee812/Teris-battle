@@ -85,12 +85,10 @@ class Table{
             return nonzerotable[pos1][end]+1;
         }
         void update_table(Block block);
-        void check_isbomb(){
-            for(int i= 0; i<row; i++){
-                if(bombtable[i]==col)
-                    bomb();
-            }
+        void sort_table(int sortrow){
+            sort(nonzerotable[sortrow].begin(), nonzerotable[sortrow].end());
         }
+        //---------print---------
         void print_nonzerotable(){
             cout<<"nonzerotable: "<<endl;
             for(int i= 0; i<col; i++)
@@ -106,9 +104,7 @@ class Table{
                 cout<<bombtable[i] <<" ";
             cout<<endl;
         } 
-        void sort_table(int sortrow){
-            sort(nonzerotable[sortrow].begin(), nonzerotable[sortrow].end());
-        }
+        //---------check---------
         int check_ishit(Map hitset){
             for(auto &it: hitset){
                 for(auto i: nonzerotable[it.first]){
@@ -120,7 +116,19 @@ class Table{
             }
             return 0;
         }
-        void bomb(){}
+        void check_isbomb(){
+            for(int i= 0; i<row; i++){
+                if(bombtable[i]==col){
+                    bomb_gameboard();
+                    bomb_nonzerotable();
+                    bomb_bombtable();
+                }
+            }
+        }
+        //---------deal with the check---------
+        void bomb_gameboard(){};
+        void bomb_nonzerotable(){};
+        void bomb_bombtable(){};
 };
 
 /*---------------main function-----------------*/
