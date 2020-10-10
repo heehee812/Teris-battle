@@ -35,8 +35,14 @@ class GameBoard{
                 cout<<endl;
             }
         }
-        void assign_block(){
-
+        void bomb_gameboard(int i){
+            cout<<"i: "<<i<<endl;
+            if(i== 0){
+                vector<Col> tmp= gameboard;
+                tmp.erase(tmp.begin()+row-1-i);
+                gameboard= tmp;
+                row--;
+            }
         }
 };
 
@@ -107,26 +113,25 @@ class Table{
             }
             return 0;
         }
-        void check_isbomb(){
-            for(int i= 0; i<row; i++){
-                if(bombtable[i]==col){
-                    bomb_gameboard((row-1)-i);
-                    bomb_nonzerotable();
-                    bomb_bombtable();
-                }
+        int check_isbomb(int i){
+            if(bombtable[i]==col){
+                return 1;
             }
+            return 0;
         }
         //---------deal with the check---------
-        void bomb_gameboard(int i){
-           
-        };
-        void bomb_nonzerotable(){};
-        void bomb_bombtable(){};
+        void bomb_nonzerotable(){
+
+        }
+        void bomb_bombtable(){
+
+        }
 };
 
 /*---------------main function-----------------*/
 int main(){
     char row[2], col[5], shape[3], pos1[4], pos2[4];
+    int isbomb= 0;
 
     //load in a test case
     string filename= "1.data";
@@ -164,7 +169,18 @@ int main(){
 
         //update gameboard, bombtable and nonzerotable
         table.update_table(block);
-        table.check_isbomb();
+        table.print_nonzerotable();
+        cout<<endl;
+        table.print_bombtable();
+        cout<<endl;
+        gb.print_gameboard();
+        cout<<endl;
+        for(int i= 0; i<rowi; i++){
+            isbomb= table.check_isbomb(i);
+            if(isbomb){
+                gb.bomb_gameboard(i);
+            }
+        }
     }
     table.print_nonzerotable();
     cout<<endl;
