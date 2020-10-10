@@ -37,11 +37,14 @@ class GameBoard{
         }
         void bomb_gameboard(int i){
             cout<<"i: "<<i<<endl;
-            if(i== 0){
+            if(i==0){
                 vector<Col> tmp= gameboard;
                 tmp.erase(tmp.begin()+row-1-i);
                 gameboard= tmp;
-                row--;
+                row--; 
+                vector<int> v;
+                v.resize(col, 0);
+                gameboard.insert(gameboard.begin(),v); 
             }
         }
 };
