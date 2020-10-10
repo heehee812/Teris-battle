@@ -74,6 +74,59 @@ class Table{
             for(int i= 0; i<col; i++){
                 nonzerotable[i].emplace_back(-1);
             }
+        }
+        int get_bottom(int pos1){
+            int end= nonzerotable[pos1].size()-1;
+            return nonzerotable[pos1][end]+1;
+        }
+        void update_nonzerotable(Block block);
+        int check_ishit(Map hitset){
+            for(auto &it: hitset){
+                for(auto i: nonzerotable[it.first]){
+                    if(i== it.second)
+                        return 1;
+                    else
+                        return 0;
+                }
+            }
+            return 0;
+        } 
+        void print_nonzerotable(){
+             for (int i= 0; i<col; i++)
+            {
+                for (auto j: nonzerotable[i])
+                    std::cout << j << " ";
+                std::cout << '\n';
+            }
+        } 
+};
+
+class Block: public GameBoard{
+    private:
+        int pos1, pos2, bottom1;
+        char *kind;
+    public:
+        Block(int x1, int x2, int y1, char *shape): pos1(x1), pos2(x2), bottom1(y1), kind(shape){
+        }
+        Map create_hitset();
+        int get_pos(){
+            return pos2+pos1;
+        }
+        char* get_kind(){
+            return kind;
+        }
+};
+
+class Table{
+    private:
+        int row, col;
+        vector<Col> nonzerotable, bombtable;
+    public:
+        Table(int n, int m): row(n), col(m){
+            nonzerotable.reserve(col);
+            for(int i= 0; i<col; i++){
+                nonzerotable[i].emplace_back(-1);
+            }
             // for (int i= 0; i<col; i++)
             // {
             //     for (auto j: nonzerotable[i])
@@ -126,41 +179,33 @@ int main(){
 
     //load in a test case
     while(!ifile.eof()){
-        cout<<"---new start---"<<endl;
         if(isend)
             break;
         //load in block   
         read_file(shape, pos1, pos2, &ifile);
         int pos1i= string_to_int(pos1)-1;
         int pos2i= string_to_int(pos2);
-        // cout<<shape<<pos1i<<pos2i<<endl;
         //check if input invalid
         if((pos1i+pos2i)>coli||(pos1i+pos2i)<0)
             break;
 
         //check if hit
         int bottom1= table.get_bottom(pos1i);
-        // cout<<"bottom1: "<<bottom1<<endl;
         Block block(pos1i, pos2i, bottom1, shape);
         Map hitset= block.create_hitset();
-        cout<<"hitset: ";
-        for(auto &it: hitset)
-            cout<<"("<<it.first<<", "<<it.second<<")";
-        cout<<endl;
         if(!hitset.empty()){
             isend= table.check_ishit(hitset);
-            cout<<"result return: "<<isend<<endl;
             if(isend)
                 game_over(1);
         }
 
         //assign to gameboard and nonzerotable
         table.update_nonzerotable(block);
-        cout<<"nonzerotable: ";
-        table.print_nonzerotable();
-        cout<<endl;
         // gb.assign_block();
     }
+    cout<<"nonzerotable: "<<endl;
+    table.print_nonzerotable();
+    cout<<endl;
     ifile.close();
     return 0;
 }
@@ -554,9 +599,7 @@ Map Block:: create_hitset(){
                     } 
                     case(79):{ //O
                         for(int i=0; i<2; i++){
-                            cout<<"i= "<<i;
                             for(int j= 1; j<=(-pos2); j++){
-                                cout<<"pos1= "<<pos1<<", j= "<<j<<endl;
                                 hitset.insert(Pair(pos1-j, bottom1+i));
                             }
                         }
@@ -675,9 +718,7 @@ Map Block:: create_hitset(){
 void Table::update_nonzerotable(Block block){
             int pos= block.get_pos();
             int bottom2= get_bottom(pos);
-            cout<<"bottom2: "<<bottom2<<endl;
             char *kind= block.get_kind();
-            cout<<"kind: "<<kind<<endl;
             int dir= kind[1]-'0';
             switch(kind[0]){
                 case(73):{ //I
