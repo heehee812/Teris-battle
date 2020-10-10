@@ -16,22 +16,14 @@ class GameBoard{
     protected:
         int row, col;
     public:
-        int **gameboard;
+        vector<Col> gameboard;
         GameBoard(int n, int m): row(n), col(m){
             cout<<"---------------Start------------------"<<endl;
-            gameboard= new_gameboard(row, col);
+            new_gameboard(row, col);
         }
         GameBoard(){}
-        int** new_gameboard(int n, int m){
-            int **element= new int*[n];
-            for(int i=0; i<n; i++){
-                element[i]= new int[m];
-            }
-            for(int i=0; i<n; i++)
-                for(int j= 0; j<m; j++){
-                    element[i][j]= 0;
-                }
-            return element;
+        void new_gameboard(int n, int m){
+            gameboard.resize(row, vector<int>(col, 0));
         }
 
         void print_gameboard(){
@@ -67,11 +59,10 @@ class Block{
 class Table{
     private:
         int row, col;
-        int **gameboard;
-        vector<Col> nonzerotable;
+        vector<Col> nonzerotable, gameboard;
         map<int, int> bombtable;
     public:
-        Table(int n, int m, int** gb): row(n), col(m), gameboard(gb){
+        Table(int n, int m, vector<Col> &gb): row(n), col(m), gameboard(gb){
             nonzerotable.reserve(col);
             for(int i= 0; i<col; i++){
                 nonzerotable[i].emplace_back(-1);
@@ -119,14 +110,16 @@ class Table{
         void check_isbomb(){
             for(int i= 0; i<row; i++){
                 if(bombtable[i]==col){
-                    bomb_gameboard();
+                    bomb_gameboard((row-1)-i);
                     bomb_nonzerotable();
                     bomb_bombtable();
                 }
             }
         }
         //---------deal with the check---------
-        void bomb_gameboard(){};
+        void bomb_gameboard(int i){
+           
+        };
         void bomb_nonzerotable(){};
         void bomb_bombtable(){};
 };
@@ -145,43 +138,44 @@ int main(){
     int rowi= string_to_int(row);
     int coli= string_to_int(col);
     GameBoard gb(rowi, coli);
-    Table table(rowi, coli, gb.gameboard);
+    gb.print_gameboard();
+    // Table table(rowi, coli, gb.gameboard);
 
     //load in a test case
-    while(!ifile.eof()){
-        if(isend)
-            break;
-        //load in block   
-        read_file(shape, pos1, pos2, &ifile);
-        int pos1i= string_to_int(pos1)-1;
-        int pos2i= string_to_int(pos2);
+    // while(!ifile.eof()){
+    //     if(isend)
+    //         break;
+    //     //load in block   
+    //     read_file(shape, pos1, pos2, &ifile);
+    //     int pos1i= string_to_int(pos1)-1;
+    //     int pos2i= string_to_int(pos2);
 
-        //check if input invalid
-        if((pos1i+pos2i)>coli||(pos1i+pos2i)<0)
-            break;
+    //     //check if input invalid
+    //     if((pos1i+pos2i)>coli||(pos1i+pos2i)<0)
+    //         break;
 
         //check if hit
-        int bottom1= table.get_bottom(pos1i);
-        Block block(pos1i, pos2i, bottom1, shape);
-        Map hitset= block.create_hitset();
-        if(!hitset.empty()){
-            isend= table.check_ishit(hitset);
-            if(isend)
-                game_over(1);
-        }
+        // int bottom1= table.get_bottom(pos1i);
+        // Block block(pos1i, pos2i, bottom1, shape);
+        // Map hitset= block.create_hitset();
+        // if(!hitset.empty()){
+        //     isend= table.check_ishit(hitset);
+        //     if(isend)
+        //         game_over(1);
+        // }
 
         //update gameboard, bombtable and nonzerotable
-        table.update_table(block);
-        table.check_isbomb();
-    }
-    table.print_nonzerotable();
-    cout<<endl;
-    table.print_bombtable();
-    cout<<endl;
-    gb.print_gameboard();
-    cout<<endl;
-    ifile.close();
-    return 0;
+        // table.update_table(block);
+        // table.check_isbomb();
+    // }
+    // table.print_nonzerotable();
+    // cout<<endl;
+    // table.print_bombtable();
+    // cout<<endl;
+    // gb.print_gameboard();
+    // cout<<endl;
+    // ifile.close();
+    // return 0;
 }
 
 
