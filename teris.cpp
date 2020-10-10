@@ -67,12 +67,16 @@ class Block: public GameBoard{
 class Table{
     private:
         int row, col;
-        vector<Col> nonzerotable, bombtable;
+        vector<Col> nonzerotable;
+        map<int, int> bombtable;
     public:
         Table(int n, int m): row(n), col(m){
             nonzerotable.reserve(col);
             for(int i= 0; i<col; i++){
                 nonzerotable[i].emplace_back(-1);
+            }
+            for(int i= 0; i<row; i++){
+                bombtable.insert(Pair(i, 0));
             }
         }
         int get_bottom(int pos1){
@@ -80,6 +84,30 @@ class Table{
             return nonzerotable[pos1][end]+1;
         }
         void update_nonzerotable(Block block);
+        void check_isbomb(){
+            for(int i= 0; i<row; i++){
+                if(bombtable[i]==col)
+                    bomb();
+            }
+        }
+        void print_nonzerotable(){
+            cout<<"nonzerotable: "<<endl;
+            for(int i= 0; i<col; i++)
+            {
+                for (auto j: nonzerotable[i])
+                    cout << j << " ";
+                cout << '\n';
+            }
+        }
+        void print_bombtable(){
+            cout<<"bombtable: ";
+            for(int i= 0; i<row; i++)
+                cout<<bombtable[i] <<" ";
+            cout<<endl;
+        } 
+        void sort_table(int sortrow){
+            sort(nonzerotable[sortrow].begin(), nonzerotable[sortrow].end());
+        }
         int check_ishit(Map hitset){
             for(auto &it: hitset){
                 for(auto i: nonzerotable[it.first]){
@@ -90,19 +118,8 @@ class Table{
                 }
             }
             return 0;
-        } 
-        void print_nonzerotable(){
-             for (int i= 0; i<col; i++)
-            {
-                for (auto j: nonzerotable[i])
-                    std::cout << j << " ";
-                std::cout << '\n';
-            }
-        } 
-
-        void sort_table(int sortrow){
-            sort(nonzerotable[sortrow].begin(), nonzerotable[sortrow].end());
         }
+        void bomb(); 
 };
 
 /*---------------main function-----------------*/
@@ -147,11 +164,14 @@ int main(){
 
         //assign to gameboard and nonzerotable
         table.update_nonzerotable(block);
-        // gb.assign_block();
+        table.print_nonzerotable();
+        cout<<endl;
+        table.print_bombtable();
+        cout<<endl;
     }
-    cout<<"nonzerotable: "<<endl;
-    table.print_nonzerotable();
-    cout<<endl;
+    // cout<<"nonzerotable: "<<endl;
+    // table.print_nonzerotable();
+    // cout<<endl;
     ifile.close();
     return 0;
 }
@@ -670,13 +690,17 @@ void Table::update_nonzerotable(Block block){
                 case(73):{ //I
                     switch(dir){
                         case(1):{
-                            for(int i=0; i<4; i++)
+                            for(int i=0; i<4; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                                }
                             break;
                         }
                         case(2):{
-                            for(int j= 0; j<4; j++)
+                            for(int j= 0; j<4; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2);
+                                ++bombtable[bottom2];
+                                }
                             break;
                         }
                         default:
@@ -687,27 +711,39 @@ void Table::update_nonzerotable(Block block){
                 case(74):{ //J
                     switch(dir){
                         case(1):{
-                            for(int i= 0; i<3; i++)
+                            for(int i= 0; i<3; i++){
                                 nonzerotable[pos+1].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                            }
                             nonzerotable[pos].emplace_back(bottom2);
+                            ++bombtable[bottom2];
                             break;
                         }
                         case(2):{
-                            for(int j= 0; j<3; j++)
+                            for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2);
+                                ++bombtable[bottom2];
+                            }
                             nonzerotable[pos].emplace_back(bottom2+1);
+                            ++bombtable[bottom2+1];
                             break;
                         }
                         case(3):{
-                            for(int i= 0; i<3; i++)
+                            for(int i= 0; i<3; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                            }
                             nonzerotable[pos+1].emplace_back(bottom2+2);
+                            ++bombtable[bottom2+2];
                             break;
                         }
                         case(4):{
-                            for(int j= 0; j<3; j++)
+                            for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
+                                ++bombtable[bottom2+1];
+                            }
                             nonzerotable[pos+2].emplace_back(bottom2);
+                            ++bombtable[bottom2];
                             break;
                         }
                         default:
@@ -718,27 +754,39 @@ void Table::update_nonzerotable(Block block){
                 case(76):{ //L
                     switch(dir){
                         case(1):{
-                            for(int i= 0; i<3; i++)
+                            for(int i= 0; i<3; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                            }
                             nonzerotable[pos+1].emplace_back(bottom2);
+                            ++bombtable[bottom2];
                             break;
                         }
                         case(2):{
-                            for(int j= 0; j<3; j++)
+                            for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
+                                ++bombtable[bottom2+1];
+                            }
                             nonzerotable[pos].emplace_back(bottom2);
+                            ++bombtable[bottom2];
                             break;
                         }
                         case(3):{
-                            for(int i= 0; i<3; i++)
+                            for(int i= 0; i<3; i++){
                                 nonzerotable[pos+1].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                            }
                             nonzerotable[pos].emplace_back(bottom2+2);
+                            ++bombtable[bottom2+2];
                             break;
                         }
                         case(4):{
-                            for(int j= 0; j<3; j++)
+                            for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
+                                ++bombtable[bottom2+1];
+                            }
                             nonzerotable[pos+2].emplace_back(bottom2);
+                            ++bombtable[bottom2];
                             break;
                         }
                         default:
@@ -748,8 +796,10 @@ void Table::update_nonzerotable(Block block){
                 } 
                 case(79):{ //O
                     for(int i= 0; i<2; i++)
-                        for(int j=0; j<2; j++)
+                        for(int j=0; j<2; j++){
                             nonzerotable[pos+j].emplace_back(bottom2+i);
+                            ++bombtable[bottom2+i];
+                        }
                     break;
                 }
                 case(83):{ //S
@@ -758,6 +808,8 @@ void Table::update_nonzerotable(Block block){
                             for(int j= 0; j<2; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2);
                                 nonzerotable[pos+1+j].emplace_back(bottom2+1);
+                                ++bombtable[bottom2];
+                                ++bombtable[bottom2+1];
                             }
                             break;
                         }
@@ -765,6 +817,8 @@ void Table::update_nonzerotable(Block block){
                                 for(int i= 0; i<2; i++){
                                     nonzerotable[pos].emplace_back(bottom2+1+i);
                                     nonzerotable[pos+1].emplace_back(bottom2+i);
+                                    ++bombtable[bottom2+1+i];
+                                    ++bombtable[bottom2+i];
                                 }
                             break;
                         }
@@ -776,27 +830,39 @@ void Table::update_nonzerotable(Block block){
                 case(84):{ //T
                     switch(dir){
                         case(1):{
-                            for(int j= 0; j<3; j++)
+                            for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
+                                ++bombtable[bottom2+1];
+                                }
                             nonzerotable[pos+1].emplace_back(bottom2);
+                            ++bombtable[bottom2];
                             break;
                         }
                         case(2):{
-                            for(int i= 0; i<3; i++)
+                            for(int i= 0; i<3; i++){
                                 nonzerotable[pos+1].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                            }
                             nonzerotable[pos].emplace_back(bottom2+1);
+                            ++bombtable[bottom2+1];
                             break;
                         }
                         case(3):{
-                            for(int j= 0; j<3; j++)
+                            for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2);
+                                ++bombtable[bottom2];
+                            }
                             nonzerotable[pos+1].emplace_back(bottom2+1);
+                            ++bombtable[bottom2+1];
                             break;
                         }
                         case(4):{
-                            for(int i= 0; i<3; i++)
+                            for(int i= 0; i<3; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                            }
                             nonzerotable[pos+1].emplace_back(bottom2+1);
+                            ++bombtable[bottom2+1];
                             break;
                         }
                         default:
@@ -810,6 +876,8 @@ void Table::update_nonzerotable(Block block){
                             for(int j= 0; j<2; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
                                 nonzerotable[pos+1+j].emplace_back(bottom2);
+                                ++bombtable[bottom2+1];
+                                ++bombtable[bottom2];
                             }
                             break;
                         }
@@ -817,6 +885,8 @@ void Table::update_nonzerotable(Block block){
                             for(int i= 0; i<2; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
                                 nonzerotable[pos+1].emplace_back(bottom2+1+i);
+                                ++bombtable[bottom2+i];
+                                ++bombtable[bottom2+1+i];
                             }
                             break;
                         }
