@@ -92,22 +92,8 @@ class Block: public GameBoard{
     public:
         Block(int x1, int x2, int y1, char *shape): pos1(x1), pos2(x2), bottom1(y1), kind(shape){
         }
-  
-        Map create_hitset(){
-            Map hitset;
-                if(pos2>=0){
-                    for(int i= 0; i<= pos2; i++){
-                        hitset.insert(Pair(pos1+i, bottom1));
-                    }
-                }
-                else{
-                    for(int i= 0; i<= ((-1)*pos2); i++){
-                        hitset.insert(Pair(pos1-i, bottom1));
-                    }
-                }
-            return hitset;   
-        }
-        void assign_to_gameboard(){}
+        Map create_hitset();
+        // void assign_to_gameboard(){}
 };
 
 
@@ -189,3 +175,464 @@ void game_over(int i){
         cout<<"---------------End------------------"<<endl;
     isend= 1;
 }
+
+/*------------member function--------------*/
+Map Block:: create_hitset(){
+            int dir= kind[1]-'0';
+            int lpos, rpos; //the lftest and the rightest point of the block
+            Map hitset;
+            if(pos2== 0);
+            else if(pos2>0){
+                switch(kind[0]){
+                    case(73):{ //I
+                        switch(dir){
+                            case(1):{
+                                lpos= pos1;
+                                for(int i= 0; i<4; i++){
+                                    for(int j= 1; j<= pos2; j++){
+                                        hitset.insert(Pair(lpos+j, bottom1+i));
+                                    }
+                                }
+                                break;
+                            }
+                            case(2):{
+                                lpos= pos1+3;
+                                for(int j= 1; j<= pos2; j++){
+                                    hitset.insert(Pair(lpos+j, bottom1));
+                                }
+                                break;
+                            }
+                            default:{
+                                cout<<"[Input Invalid] ";
+                                game_over(1);
+                            }
+                        }
+                        break;
+                    }
+                    case(74):{ //J
+                        switch(dir){
+                            lpos= pos1+1;
+                            case(1):{
+                                for(int i= 0; i<=3; i++)
+                                    for(int j= 1; j<= pos2; j++){
+                                        hitset.insert(Pair(lpos+j, bottom1+i));
+                                    }
+                                break;
+                            }
+                            case(2):{
+                                lpos= pos1+2;
+                                for(int j= 1; j<= pos2; j++)
+                                    hitset.insert(Pair(lpos+j, bottom1));
+                                break;
+                            }
+                            case(3):{
+                                lpos= pos1+1;
+                                for(int j= 1; j<= pos2; j++){
+                                    hitset.insert(Pair(lpos+j, bottom1+2));
+                                }
+                                for(int i= 0; i< 2; i++)
+                                    for(int j= 1; j<= pos2; j++){
+                                        hitset.insert(Pair(pos1+j, bottom1+i));
+                                    }
+                                break;
+                            }
+                            case(4):{
+                                lpos= pos1+2;
+                                for(int i= 0; i< 2; i++)
+                                    for(int j= 1; j<= pos2; j++){
+                                        hitset.insert(Pair(lpos+j, bottom1+i));
+                                    }
+                                break;
+                            }
+                            default:{
+                                cout<<"[Input Invalid] ";
+                                game_over(1);
+                            }
+                        }
+                        break;
+                    }
+                    case(76):{ //L
+                        switch(dir){
+                            case(1):{
+                                 lpos= pos1+1;
+                                for(int j= 1; j<= pos2; j++){
+                                    hitset.insert(Pair(lpos+j, bottom1));
+                                }
+                                for(int i= 1; i<= 2; i++)
+                                    for(int j= 1; j<= pos2; j++){
+                                        hitset.insert(Pair(pos1+j, bottom1+i));
+                                    }
+                                break;
+                            }
+                            case(2):{
+                                lpos= pos1+2;
+                                for(int j= 1; j<= pos2; j++){
+                                    hitset.insert(Pair(lpos+j, bottom1+1));
+                                    hitset.insert(Pair(pos1+j, bottom1));
+                                }
+                                break;
+                            }
+                            case(3):{
+                                lpos= pos1+1;
+                                for(int i= 0; i<3; i++)
+                                    for(int j= 1; j<=pos2; pos2++){
+                                        hitset.insert(Pair(lpos+j, bottom1+i));
+                                    }
+                                break;
+                            }
+                            case(4):{
+                                lpos= pos1+2;
+                                for(int i= 0; i<2; i++)
+                                    for(int j= 1; j<=pos2; j++){
+                                        hitset.insert(Pair(lpos+j, bottom1+i));
+                                    } 
+                                break;
+                            }
+                            default:{
+                                cout<<"[Input Invalid] ";
+                                game_over(1);
+                            }
+                        }
+                        break;
+                    } 
+                    case(79):{ //O
+                        lpos= pos1+1;
+                        for(int i= 0; i<2; i++)
+                            for(int j= 1; j<= pos2; j++){
+                                hitset.insert(Pair(lpos+j, bottom1+i));
+                            }
+                        break;
+                    }
+                    case(83):{ //S
+                        switch(dir){
+                            case(1):{
+                                lpos= pos1+1;
+                                for(int j= 1; j<= pos2; j++){
+                                    hitset.insert(Pair(lpos+j, bottom1+1));
+                                    hitset.insert(Pair(pos1+j, bottom1));
+                                }
+                                break;
+                            }
+                            case(2):{
+                                lpos= pos1+ 1;
+                                for(int i= 0; i<2; i++)
+                                    for(int j= 1; j<= pos2; j++){
+                                        hitset.insert(Pair(lpos+j, bottom1+i));
+                                    }
+                                for(int j=1; j<=pos2; j++){
+                                    hitset.insert(Pair(pos1+j, bottom1+2));
+                                }
+                                break;
+                            }
+                            default:{
+                                cout<<"[Input Invalid] ";
+                                game_over(1);
+                            }
+                        }
+                        break;
+                    }
+                    case(84):{ //T
+                        switch(dir){
+                            case(1):{
+                                lpos= pos1+1;
+                                for(int j=1; j<= pos2; j++){
+                                    hitset.insert(Pair(lpos+j, bottom1+1));
+                                    hitset.insert(Pair(pos1+j, bottom1));
+                                }
+                                break;
+                            }
+                            case(2):{
+                                lpos= pos1+1;
+                                for(int i = 0; i<3; i++)
+                                    for(int j= 1; j<=pos2; j++){
+                                        hitset.insert(Pair(lpos+j, bottom1+i));
+                                    }
+                                break;
+                            }
+                            case(3):{
+                                lpos= pos1+2;
+                                for(int j= 1; j<=pos2; j++){
+                                    hitset.insert(Pair(lpos+j, bottom1));
+                                    hitset.insert(Pair(pos1+j, bottom1+1));
+                                }
+                                break;
+                            }
+                            case(4):{
+                                lpos= pos1+1;
+                                for(int j= 1; j<= pos2; j++){
+                                    hitset.insert(Pair(lpos+j, bottom1+1));
+                                    hitset.insert(Pair(pos1+j, bottom1));
+                                    hitset.insert(Pair(pos1+j, bottom1+2));
+                                }
+                                break;
+                            }
+                           default:{
+                                cout<<"[Input Invalid] ";
+                                game_over(1);
+                            }
+                        }
+                        break;
+                    }
+                    case(90):{ //Z
+                        switch(dir){
+                            case(1):{
+                                lpos= pos1+2;
+                                for(int j=1; j<=pos2; j++){
+                                    hitset.insert(Pair(lpos+j, bottom1));
+                                    hitset.insert(Pair(pos1+j, bottom1+1));
+                                }
+                                break;
+                            }
+                            case(2):{
+                                lpos= pos1+ 1;
+                                rpos= bottom1+1;
+                                for(int i= 0; i<2; i++)
+                                    for(int j= 1; j<= pos2; j++){
+                                        hitset.insert(Pair(lpos+j, rpos+i));
+                                    }
+                                for(int j=1; j<=pos2; j++){
+                                    hitset.insert(Pair(pos1+j, bottom1));
+                                }
+                                break;
+                            }
+                            default:{
+                                cout<<"[Input Invalid] ";
+                                game_over(1);
+                            }
+                        }
+                        break;
+                    }
+                    case(69):{
+                        game_over(0);
+                    }
+                    default:{
+                        game_over(1);
+                    }
+                }
+            }
+            else{
+                switch(kind[0]){
+                    case(73):{ //I
+                        switch(dir){
+                            case(1):{
+                                for(int i=0; i<4; i++)
+                                    for(int j =1; j<=(-pos2); j++){
+                                        hitset.insert(Pair(pos1-j, bottom1+i));
+                                    }
+                                break;
+                            }
+                            case(2):{
+                                for(int j =1; j<=(-pos2); j++){
+                                    hitset.insert(Pair(pos1-j, bottom1));
+                                }
+                                break;
+                            }
+                            default:{
+                                cout<<"[Input Invalid] ";
+                                game_over(1);
+                            }
+                        }
+                        break;
+                    }
+                    case(74):{ //J
+                        switch(dir){
+                            case(1):{
+                                for(int j= 1; j<=(-pos2); j++){
+                                    hitset.insert(Pair(pos1-j, bottom1));
+                                }
+                                for(int i= 0; i<3; i++)
+                                    for(int j= 1; j<=(-pos2); j++){
+                                        hitset.insert(Pair(pos1-j, bottom1+i));
+                                    }
+                                break;
+                            }
+                            case(2):{
+                                for(int i= 0; i<2; i++){
+                                    for(int j= 1; j<=(-pos2); j++){
+                                        hitset.insert(Pair(pos1-j, bottom1+i));
+                                    }
+                                }
+                                break;
+                            }
+                            case(3):{
+                                for(int i= 0; i<3; i++)
+                                    for(int j=1; j<=(-pos2); j++){
+                                        hitset.insert(Pair(pos1-j, bottom1+i));
+                                    }
+                                break;
+                            }
+                            case(4):{
+                                lpos= pos1+2;
+                                for(int j= 1; j<=(-pos2); j++){
+                                    hitset.insert(Pair(pos1-j, bottom1+1));
+                                    hitset.insert(Pair(lpos-j, bottom1));
+                                }
+                                break;
+                            }
+                            default:{
+                                cout<<"[Input Invalid] ";
+                                game_over(1);
+                            }
+                        }
+                        break;
+                    }
+                    case(76):{ //L
+                        switch(dir){
+                            case(1):{
+                                for(int i= 0; i<3; i++)
+                                    for(int j=1; j<=(-pos2); j++){
+                                        hitset.insert(Pair(pos1-j, bottom1+i));
+                                    }
+                                break;
+                            }
+                            case(2):{
+                                for(int i= 0; i<2; i++){
+                                    for(int j= 1; j<=(-pos2); j++){
+                                        hitset.insert(Pair(pos1-j, bottom1+i));
+                                    }
+                                }
+                                break;
+                            }
+                            case(3):{
+                                lpos= pos1+1;
+                                for(int j=1; j<=(-pos2); j++){
+                                    hitset.insert(Pair(pos1-j, bottom1+2));
+                                }
+                                for(int i= 0; i<2; i++)
+                                    for(int j= 1; j<=(-pos2); j++){
+                                        hitset.insert(Pair(lpos-j, bottom1+i));
+                                    }
+                                break;
+                            }
+                            case(4):{
+                                lpos= pos1+2;
+                                for(int j=1; j<=(-pos2); j++){
+                                    hitset.insert(Pair(pos1-j,bottom1+1));
+                                    hitset.insert(Pair(lpos-j, bottom1));
+                                }
+                                break;
+                            }
+                            default:{
+                                cout<<"[Input Invalid] ";
+                                game_over(1);
+                            }
+                        }
+                        break;
+                    } 
+                    case(79):{ //O
+                        for(int i=0; i<2; i++)
+                            for(int j= 1; j<=(-pos2); j++){
+                                hitset.insert(Pair(lpos-j, bottom1+i));
+                            }
+                        break;
+                    }
+                    case(83):{ //S
+                        switch(dir){
+                            case(1):{
+                                lpos= pos1+1;
+                                for(int j=1; j<=(-pos2); j++){
+                                    hitset.insert(Pair(pos1-j, bottom1));
+                                    hitset.insert(Pair(lpos-j, bottom1+1));
+                                }
+                                break;
+                            }
+                            case(2):{
+                                lpos= pos1+1;
+                                rpos= bottom1+1;
+                                for(int j=1; j<=(-pos2); j++){
+                                    hitset.insert(Pair(lpos-j, bottom1));
+                                }
+                                for(int i=0; i<2; i++)
+                                    for(int j=1; j<=(-pos2); j++){
+                                        hitset.insert(Pair(pos1-j, rpos+i));
+                                    }
+                                break;
+                            }
+                            default:{
+                                cout<<"[Input Invalid] ";
+                                game_over(1);
+                            }
+                        }
+                        break;
+                    }
+                    case(84):{ //T
+                        switch(dir){
+                            case(1):{
+                                lpos= pos1+1;
+                                for(int j= 1; j<=(-pos2); j++){
+                                    hitset.insert(Pair(lpos-j, bottom1));
+                                    hitset.insert(Pair(pos1-j, bottom1+1));
+                                }
+                                break;
+                            }
+                            case(2):{
+                                lpos= pos1+1;
+                                for(int j= 1; j<=(-pos2); j++){
+                                    hitset.insert(Pair(pos1-j, bottom1+1));
+                                    hitset.insert(Pair(lpos-j, bottom1));
+                                    hitset.insert(Pair(lpos-j, bottom1+2));
+                                }
+                                break;
+                            }
+                            case(3):{
+                                lpos= pos1+1;
+                                for(int j= 1; j<=(-pos2); j++){
+                                    hitset.insert(Pair(lpos-j, bottom1+1));
+                                    hitset.insert(Pair(pos1-j, bottom1));
+                                }
+                                break;
+                            }
+                            case(4):{
+                                for(int i= 0; i<3; i++)
+                                    for(int j=1; j<=(-pos2); j++){
+                                        hitset.insert(Pair(pos1-j, bottom1+i));
+                                    }
+                                break;
+                            }
+                            default:{
+                                cout<<"[Input Invalid] ";
+                                game_over(1);
+                            }
+                        }
+                        break;
+                    }
+                    case(90):{ //Z
+                        switch(dir){
+                            case(1):{
+                                lpos= pos1+1;
+                                for(int j= 1; j<=(-pos2); j++){
+                                    hitset.insert(Pair(lpos-j, bottom1));
+                                    hitset.insert(Pair(pos1-j, bottom1+1));
+                                }
+                                break;
+                            }
+                            case(2):{
+                                lpos= pos1+1;
+                                for(int j= 1; j<=(-pos2); j++){
+                                    hitset.insert(Pair(lpos-j, bottom1+2));
+                                }
+                                for(int i= 0; i<2; i++)
+                                    for(int j= 1; j<=(-pos2); j++){
+                                        hitset.insert(Pair(pos1-j, bottom1+i));
+                                    }
+                                break;
+                            }
+                            default:{
+                                cout<<"[Input Invalid] ";
+                                game_over(1);
+                            }
+                        }
+                        break;
+                    }
+                    case(69):{
+                        game_over(0);
+                        break;
+                    }
+                    default:{
+                        game_over(1);
+                    }
+                }
+            }
+            return hitset;   
+        }
+
