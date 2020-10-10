@@ -99,49 +99,10 @@ class Table{
                 std::cout << '\n';
             }
         } 
-};
 
-class Table{
-    private:
-        int row, col;
-        vector<Col> nonzerotable, bombtable;
-    public:
-        Table(int n, int m): row(n), col(m){
-            nonzerotable.reserve(col);
-            for(int i= 0; i<col; i++){
-                nonzerotable[i].emplace_back(-1);
-            }
-            // for (int i= 0; i<col; i++)
-            // {
-            //     for (auto j: nonzerotable[i])
-            //         std::cout << j << " ";
-            //     std::cout << '\n';
-            // }
+        void sort_table(int sortrow){
+            sort(nonzerotable[sortrow].begin(), nonzerotable[sortrow].end());
         }
-        int get_bottom(int pos1){
-            int end= nonzerotable[pos1].size()-1;
-            return nonzerotable[pos1][end]+1;
-        }
-        void update_nonzerotable(Block block);
-        int check_ishit(Map hitset){
-            for(auto &it: hitset){
-                for(auto i: nonzerotable[it.first]){
-                    if(i== it.second)
-                        return 1;
-                    else
-                        return 0;
-                }
-            }
-            return 0;
-        } 
-        void print_nonzerotable(){
-             for (int i= 0; i<col; i++)
-            {
-                for (auto j: nonzerotable[i])
-                    std::cout << j << " ";
-                std::cout << '\n';
-            }
-        } 
 };
 
 /*---------------main function-----------------*/
@@ -169,6 +130,7 @@ int main(){
         read_file(shape, pos1, pos2, &ifile);
         int pos1i= string_to_int(pos1)-1;
         int pos2i= string_to_int(pos2);
+
         //check if input invalid
         if((pos1i+pos2i)>coli||(pos1i+pos2i)<0)
             break;
@@ -866,6 +828,9 @@ void Table::update_nonzerotable(Block block){
                 default:{
                     game_over(1);
                 }
+            }
+            for(int i= 0; i<col; i++){
+                sort_table(i);
             }
         }
 
