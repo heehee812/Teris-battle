@@ -169,6 +169,7 @@ int main(){
     table.print_nonzerotable();
     cout<<endl;
     table.print_bombtable();
+    cout<<endl;
     gb.print_gameboard();
     cout<<endl;
     ifile.close();
