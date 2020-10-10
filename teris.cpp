@@ -164,10 +164,7 @@ int main(){
 
         //assign to gameboard and nonzerotable
         table.update_nonzerotable(block);
-        table.print_nonzerotable();
-        cout<<endl;
-        table.print_bombtable();
-        cout<<endl;
+        table.check_isbomb();
     }
     // cout<<"nonzerotable: "<<endl;
     // table.print_nonzerotable();
