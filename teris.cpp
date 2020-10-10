@@ -83,7 +83,7 @@ class Table{
             int end= nonzerotable[pos1].size()-1;
             return nonzerotable[pos1][end]+1;
         }
-        void update_nonzerotable(Block block);
+        void update_table(Block block);
         void check_isbomb(){
             for(int i= 0; i<row; i++){
                 if(bombtable[i]==col)
@@ -119,7 +119,7 @@ class Table{
             }
             return 0;
         }
-        void bomb(); 
+        void bomb(){}
 };
 
 /*---------------main function-----------------*/
@@ -163,12 +163,12 @@ int main(){
         }
 
         //assign to gameboard and nonzerotable
-        table.update_nonzerotable(block);
+        table.update_table(block);
         table.check_isbomb();
     }
-    // cout<<"nonzerotable: "<<endl;
-    // table.print_nonzerotable();
-    // cout<<endl;
+    table.print_nonzerotable();
+    cout<<endl;
+    table.print_bombtable();
     ifile.close();
     return 0;
 }
@@ -407,7 +407,7 @@ Map Block:: create_hitset(){
                                 }
                                 break;
                             }
-                           default:{
+                            default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
                             }
@@ -678,7 +678,7 @@ Map Block:: create_hitset(){
             return hitset;   
         }
 
-void Table::update_nonzerotable(Block block){
+void Table::update_table(Block block){
             int pos= block.get_pos();
             int bottom2= get_bottom(pos);
             char *kind= block.get_kind();
@@ -700,8 +700,9 @@ void Table::update_nonzerotable(Block block){
                                 }
                             break;
                         }
-                        default:
+                        default:{
                             game_over(1);
+                        }
                     }
                     break;
                 }
@@ -892,9 +893,12 @@ void Table::update_nonzerotable(Block block){
                     }
                     break;
                 }
-                default:{
-                    game_over(1);
+                case(69):{
+                    game_over(0);
+                    break;
                 }
+                default:
+                    game_over(1);
             }
             for(int i= 0; i<col; i++){
                 sort_table(i);
