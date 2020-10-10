@@ -119,16 +119,26 @@ int main(){
     while(!ifile.eof()){
         if(isend)
             break;
+        //load in block   
         read_file(shape, pos1, pos2, &ifile);
         int pos1i= string_to_int(pos1)-1;
         int pos2i= string_to_int(pos2);
+
+        //check if input invalid
         if((pos1i+pos2i)>coli||(pos1i+pos2i)<0)
             break;
+
+        //check if hit
         int bottom1= table.get_bottom(pos1i);
         Block block(pos1i, pos2i, bottom1, shape);
         Map hitset= block.create_hitset();
-        isend= table.check_ishit(hitset);
-        cout<<isend<<endl;
+        if(!hitset.empty()){
+            isend= table.check_ishit(hitset);
+            if(isend)
+                game_over(1);
+        }
+
+        //assign
     }
     ifile.close();
     return 0;
