@@ -15,8 +15,8 @@ void game_over(int);
 class GameBoard{
     protected:
         int row, col;
-        int **gameboard;
     public:
+        int **gameboard;
         GameBoard(int n, int m): row(n), col(m){
             cout<<"---------------Start------------------"<<endl;
             gameboard= new_gameboard(row, col);
@@ -48,7 +48,7 @@ class GameBoard{
         }
 };
 
-class Block: public GameBoard{
+class Block{
     private:
         int pos1, pos2, bottom1;
         char *kind;
@@ -67,10 +67,11 @@ class Block: public GameBoard{
 class Table{
     private:
         int row, col;
+        int **gameboard;
         vector<Col> nonzerotable;
         map<int, int> bombtable;
     public:
-        Table(int n, int m): row(n), col(m){
+        Table(int n, int m, int** gb): row(n), col(m), gameboard(gb){
             nonzerotable.reserve(col);
             for(int i= 0; i<col; i++){
                 nonzerotable[i].emplace_back(-1);
@@ -136,8 +137,7 @@ int main(){
     int rowi= string_to_int(row);
     int coli= string_to_int(col);
     GameBoard gb(rowi, coli);
-    Table table(rowi, coli);
-    // gameboard.print_gameboard();
+    Table table(rowi, coli, gb.gameboard);
 
     //load in a test case
     while(!ifile.eof()){
