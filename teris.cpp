@@ -43,6 +43,9 @@ class GameBoard{
                 cout<<endl;
             }
         }
+        void assign_block(){
+
+        }
 };
 
 class Table{
@@ -111,7 +114,7 @@ int main(){
     ifile.getline(col, sizeof(col), '\n');
     int rowi= string_to_int(row);
     int coli= string_to_int(col);
-    GameBoard gameboard(rowi, coli);
+    GameBoard gb(rowi, coli);
     Table table(rowi, coli);
     // gameboard.print_gameboard();
 
@@ -138,7 +141,9 @@ int main(){
                 game_over(1);
         }
 
-        //assign
+        //assign to gameboard and nonzerotable
+        table.update_nonzerotable();
+        gb.assign_block();
     }
     ifile.close();
     return 0;
