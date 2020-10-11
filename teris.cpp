@@ -36,7 +36,6 @@ class GameBoard{
             }
         }
         void bomb_gameboard(int i){
-            if(i==0){
                 cout<<"ii: "<<i<<endl;
                 vector<Col> tmp= gameboard;
                 tmp.erase(tmp.begin()+row-1-i);
@@ -44,7 +43,6 @@ class GameBoard{
                 vector<int> v;
                 v.resize(col, 0);
                 gameboard.insert(gameboard.begin(),v); 
-            }
         }
 };
 
@@ -117,13 +115,13 @@ class Table{
         }
         int check_isbomb(int i){
             if(bombtable[i]==col){
+                bombtable[i]=0;
                 return 1;
             }
             return 0;
         }
         //---------deal with the check---------
         void bomb_nonzerotable(int i){
-            if(i== 0){
                 cout<<"in n"<<endl;
                 for(int c= 0; c<col; c++){
                     nonzerotable[c].erase(nonzerotable[c].begin()+i+1);
@@ -133,10 +131,6 @@ class Table{
                     }
                     cout<<endl;
                 }
-            }
-        }
-        void bomb_bombtable(){
-
         }
 };
 
