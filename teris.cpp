@@ -136,12 +136,12 @@ class Table{
 };
 
 /*---------------main function-----------------*/
-int main(){
+int main(int argc, char *argv[]){
     char row[2], col[5], shape[3], pos1[4], pos2[4];
     int isbomb= 0;
 
     //load in a test case
-    string filename= "1.data";
+    string filename= argv[1];
     fstream ifile(filename, ios::in);
 
     //get the size of the game board
