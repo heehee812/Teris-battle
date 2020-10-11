@@ -66,7 +66,7 @@ class Table{
     private:
         int row, col;
         vector<Col> nonzerotable, &gameboard;
-        map<int, int> bombtable;
+        vector<int> bombtable;
     public:
         Table(int n, int m, vector<Col> &gb): row(n), col(m), gameboard(gb){
             nonzerotable.reserve(col);
@@ -74,7 +74,7 @@ class Table{
                 nonzerotable[i].emplace_back(-1);
             }
             for(int i= 0; i<row; i++){
-                bombtable.insert(Pair(i, 0));
+                bombtable.emplace_back(0);
             }
         }
         int get_bottom(int pos1){
@@ -115,7 +115,6 @@ class Table{
         }
         int check_isbomb(int i){
             if(bombtable[i]==col){
-                bombtable[i]=0;
                 return 1;
             }
             return 0;
@@ -131,6 +130,11 @@ class Table{
                     }
                     cout<<endl;
                 }
+        }
+        void bomb_bombtable(int i){
+            cout<<"b: "<<bombtable[i]<<endl;
+            bombtable.erase(bombtable.begin()+i);
+            bombtable.emplace_back(0);
         }
 };
 
@@ -192,6 +196,7 @@ int main(){
             if(isbomb){
                 gb.bomb_gameboard(i);
                 table.bomb_nonzerotable(i);
+                table.bomb_bombtable(i);
                 cout<<"----after check------"<<endl;
                 table.print_nonzerotable();
                 cout<<endl;
