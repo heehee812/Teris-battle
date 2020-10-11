@@ -137,7 +137,7 @@ class Table{
 
 /*---------------main function-----------------*/
 int main(int argc, char *argv[]){
-    char row[2], col[5], shape[3], pos1[4], pos2[4];
+    char row[3], col[3], shape[3], pos1[4], pos2[4];
     int isbomb= 0;
 
     //load in a test case
@@ -151,7 +151,7 @@ int main(int argc, char *argv[]){
     int coli= string_to_int(col);
     GameBoard gb(rowi, coli);
     Table table(rowi, coli, gb.gameboard);
-
+    
     //load in a test case
     while(!ifile.eof()){
         if(isend)
