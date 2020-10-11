@@ -15,40 +15,38 @@ void game_over(int);
 class GameBoard{
     protected:
         int row, col;
-        int **gameboard;
     public:
+        vector<Col> gameboard;
         GameBoard(int n, int m): row(n), col(m){
             cout<<"---------------Start------------------"<<endl;
-            gameboard= new_gameboard(row, col);
+            new_gameboard(row, col);
         }
         GameBoard(){}
-        int** new_gameboard(int n, int m){
-            int ele= 0;
-            int **element= new int*[n];
-            for(int i=0; i<n; i++){
-                element[i]= new int[m];
-            }
-            for(int i=0; i<n; i++)
-                for(int j= 0; j<m; j++){
-                    element[i][j]= 0;
-                }
-            return element;
+        void new_gameboard(int n, int m){
+            gameboard.resize(row, vector<int>(col, 0));
         }
 
         void print_gameboard(){
+            cout<<"gameboard: "<<endl;
             for(int i=0; i<row; i++){
                 for(int j= 0; j<col; j++){
                     cout<<gameboard[i][j];
                 }
                 cout<<endl;
             }
+            cout<<endl;
         }
-        void assign_block(){
-
+        void bomb_gameboard(int i){
+                vector<Col> tmp= gameboard;
+                tmp.erase(tmp.begin()+row-1-i);
+                gameboard= tmp;
+                vector<int> v;
+                v.resize(col, 0);
+                gameboard.insert(gameboard.begin(),v); 
         }
 };
 
-class Block: public GameBoard{
+class Block{
     private:
         int pos1, pos2, bottom1;
         char *kind;
@@ -67,19 +65,44 @@ class Block: public GameBoard{
 class Table{
     private:
         int row, col;
-        vector<Col> nonzerotable, bombtable;
+        vector<Col> nonzerotable, &gameboard;
+        vector<int> bombtable;
     public:
-        Table(int n, int m): row(n), col(m){
+        Table(int n, int m, vector<Col> &gb): row(n), col(m), gameboard(gb){
             nonzerotable.reserve(col);
             for(int i= 0; i<col; i++){
                 nonzerotable[i].emplace_back(-1);
+            }
+            for(int i= 0; i<row; i++){
+                bombtable.emplace_back(0);
             }
         }
         int get_bottom(int pos1){
             int end= nonzerotable[pos1].size()-1;
             return nonzerotable[pos1][end]+1;
         }
-        void update_nonzerotable(Block block);
+        void update_table(Block block);
+        void sort_table(int sortrow){
+            sort(nonzerotable[sortrow].begin(), nonzerotable[sortrow].end());
+        }
+        //---------print---------
+        void print_nonzerotable(){
+            cout<<"nonzerotable: "<<endl;
+            for(int i= 0; i<col; i++)
+            {
+                for (auto j: nonzerotable[i])
+                    cout << j << " ";
+                cout << '\n';
+            }
+            cout<<endl;
+        }
+        void print_bombtable(){
+            cout<<"bombtable: ";
+            for(int i= 0; i<row; i++)
+                cout<<bombtable[i] <<" ";
+            cout<<endl;
+        } 
+        //---------check---------
         int check_ishit(Map hitset){
             for(auto &it: hitset){
                 for(auto i: nonzerotable[it.first]){
@@ -90,23 +113,32 @@ class Table{
                 }
             }
             return 0;
-        } 
-        void print_nonzerotable(){
-             for (int i= 0; i<col; i++)
-            {
-                for (auto j: nonzerotable[i])
-                    std::cout << j << " ";
-                std::cout << '\n';
+        }
+        int check_isbomb(int i){
+            if(bombtable[i]==col){
+                return 1;
             }
-        } 
-        void sort_table(int sortrow){
-            sort(nonzerotable[sortrow].begin(), nonzerotable[sortrow].end());
+            return 0;
+        }
+        //---------deal with the check---------
+        void bomb_nonzerotable(int i){
+                for(int c= 0; c<col; c++){
+                    nonzerotable[c].erase(nonzerotable[c].begin()+i+1);
+                    for(int r= i+1; r<nonzerotable[c].size(); r++){
+                        --nonzerotable[c][r];
+                    }
+                }
+        }
+        void bomb_bombtable(int i){
+            bombtable.erase(bombtable.begin()+i);
+            bombtable.emplace_back(0);
         }
 };
 
 /*---------------main function-----------------*/
 int main(){
     char row[2], col[5], shape[3], pos1[4], pos2[4];
+    int isbomb= 0;
 
     //load in a test case
     string filename= "1.data";
@@ -118,8 +150,7 @@ int main(){
     int rowi= string_to_int(row);
     int coli= string_to_int(col);
     GameBoard gb(rowi, coli);
-    Table table(rowi, coli);
-    // gameboard.print_gameboard();
+    Table table(rowi, coli, gb.gameboard);
 
     //load in a test case
     while(!ifile.eof()){
@@ -133,7 +164,6 @@ int main(){
         //check if input invalid
         if((pos1i+pos2i)>coli||(pos1i+pos2i)<0)
             break;
-
         //check if hit
         int bottom1= table.get_bottom(pos1i);
         Block block(pos1i, pos2i, bottom1, shape);
@@ -144,13 +174,29 @@ int main(){
                 game_over(1);
         }
 
-        //assign to gameboard and nonzerotable
-        table.update_nonzerotable(block);
-        // gb.assign_block();
+        //update gameboard, bombtable and nonzerotable
+        table.update_table(block);
+
+        //chek if isbomb
+        int i= rowi;
+        int count= 0;//row that should be check
+        while(i--){
+            isbomb= table.check_isbomb(count);
+            if(isbomb){
+                gb.bomb_gameboard(count);
+                table.bomb_nonzerotable(count);
+                table.bomb_bombtable(count);
+            }
+            else
+            {
+                count++;
+            }
+            
+        }
     }
-    cout<<"nonzerotable: "<<endl;
     table.print_nonzerotable();
-    cout<<endl;
+    table.print_bombtable();
+    gb.print_gameboard();
     ifile.close();
     return 0;
 }
@@ -389,7 +435,7 @@ Map Block:: create_hitset(){
                                 }
                                 break;
                             }
-                           default:{
+                            default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
                             }
@@ -660,7 +706,7 @@ Map Block:: create_hitset(){
             return hitset;   
         }
 
-void Table::update_nonzerotable(Block block){
+void Table::update_table(Block block){
             int pos= block.get_pos();
             int bottom2= get_bottom(pos);
             char *kind= block.get_kind();
@@ -669,44 +715,71 @@ void Table::update_nonzerotable(Block block){
                 case(73):{ //I
                     switch(dir){
                         case(1):{
-                            for(int i=0; i<4; i++)
+                            for(int i=0; i<4; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                            }
                             break;
                         }
                         case(2):{
-                            for(int j= 0; j<4; j++)
+                            for(int j= 0; j<4; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2);
+                                ++bombtable[bottom2];
+                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                            }
                             break;
                         }
-                        default:
+                        default:{
                             game_over(1);
+                        }
                     }
                     break;
                 }
                 case(74):{ //J
                     switch(dir){
                         case(1):{
-                            for(int i= 0; i<3; i++)
+                            for(int i= 0; i<3; i++){
                                 nonzerotable[pos+1].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                                gameboard[(row-1)-(bottom2+i)][pos+1]= 1;
+                            }
                             nonzerotable[pos].emplace_back(bottom2);
+                            ++bombtable[bottom2];
+                            gameboard[(row-1)-(bottom2)][pos]= 1;
                             break;
                         }
                         case(2):{
-                            for(int j= 0; j<3; j++)
+                            for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2);
+                                ++bombtable[bottom2];
+                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                            }
                             nonzerotable[pos].emplace_back(bottom2+1);
+                            ++bombtable[bottom2+1];
+                            gameboard[(row-1)-(bottom2+1)][pos]= 1;
                             break;
                         }
                         case(3):{
-                            for(int i= 0; i<3; i++)
+                            for(int i= 0; i<3; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                            }
                             nonzerotable[pos+1].emplace_back(bottom2+2);
+                            ++bombtable[bottom2+2];
+                            gameboard[(row-1)-(bottom2+2)][pos+1]= 1;
                             break;
                         }
                         case(4):{
-                            for(int j= 0; j<3; j++)
+                            for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
+                                ++bombtable[bottom2+1];
+                                gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                            }
                             nonzerotable[pos+2].emplace_back(bottom2);
+                            ++bombtable[bottom2];
+                            gameboard[(row-1)-(bottom2)][pos+2]= 1;
                             break;
                         }
                         default:
@@ -717,27 +790,47 @@ void Table::update_nonzerotable(Block block){
                 case(76):{ //L
                     switch(dir){
                         case(1):{
-                            for(int i= 0; i<3; i++)
+                            for(int i= 0; i<3; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                            }
                             nonzerotable[pos+1].emplace_back(bottom2);
+                            ++bombtable[bottom2];
+                            gameboard[(row-1)-(bottom2)][pos+1]= 1;
                             break;
                         }
                         case(2):{
-                            for(int j= 0; j<3; j++)
+                            for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
+                                ++bombtable[bottom2+1];
+                                gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                            }
                             nonzerotable[pos].emplace_back(bottom2);
+                            ++bombtable[bottom2];
+                            gameboard[(row-1)-(bottom2)][pos]= 1;
                             break;
                         }
                         case(3):{
-                            for(int i= 0; i<3; i++)
+                            for(int i= 0; i<3; i++){
                                 nonzerotable[pos+1].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                                gameboard[(row-1)-(bottom2+i)][pos+1]= 1;
+                            }
                             nonzerotable[pos].emplace_back(bottom2+2);
+                            ++bombtable[bottom2+2];
+                            gameboard[(row-1)-(bottom2+2)][pos]= 1;
                             break;
                         }
                         case(4):{
-                            for(int j= 0; j<3; j++)
+                            for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
+                                ++bombtable[bottom2+1];
+                                gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                            }
                             nonzerotable[pos+2].emplace_back(bottom2);
+                            ++bombtable[bottom2];
+                            gameboard[(row-1)-(bottom2)][pos+2]= 1;
                             break;
                         }
                         default:
@@ -747,8 +840,11 @@ void Table::update_nonzerotable(Block block){
                 } 
                 case(79):{ //O
                     for(int i= 0; i<2; i++)
-                        for(int j=0; j<2; j++)
+                        for(int j=0; j<2; j++){
                             nonzerotable[pos+j].emplace_back(bottom2+i);
+                            ++bombtable[bottom2+i];
+                            gameboard[(row-1)-(bottom2+i)][pos+j]= 1;
+                        }
                     break;
                 }
                 case(83):{ //S
@@ -757,6 +853,10 @@ void Table::update_nonzerotable(Block block){
                             for(int j= 0; j<2; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2);
                                 nonzerotable[pos+1+j].emplace_back(bottom2+1);
+                                ++bombtable[bottom2];
+                                ++bombtable[bottom2+1];
+                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                                gameboard[(row-1)-(bottom2+1)][pos+1+j]= 1;
                             }
                             break;
                         }
@@ -764,6 +864,10 @@ void Table::update_nonzerotable(Block block){
                                 for(int i= 0; i<2; i++){
                                     nonzerotable[pos].emplace_back(bottom2+1+i);
                                     nonzerotable[pos+1].emplace_back(bottom2+i);
+                                    ++bombtable[bottom2+1+i];
+                                    ++bombtable[bottom2+i];
+                                    gameboard[(row-1)-(bottom2+1+i)][pos]= 1;
+                                    gameboard[(row-1)-(bottom2+i)][pos+1]= 1;
                                 }
                             break;
                         }
@@ -775,27 +879,47 @@ void Table::update_nonzerotable(Block block){
                 case(84):{ //T
                     switch(dir){
                         case(1):{
-                            for(int j= 0; j<3; j++)
+                            for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
+                                ++bombtable[bottom2+1];
+                                gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                                }
                             nonzerotable[pos+1].emplace_back(bottom2);
+                            ++bombtable[bottom2];
+                            gameboard[(row-1)-(bottom2)][pos+1]= 1;
                             break;
                         }
                         case(2):{
-                            for(int i= 0; i<3; i++)
+                            for(int i= 0; i<3; i++){
                                 nonzerotable[pos+1].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                                gameboard[(row-1)-(bottom2+i)][pos+1]= 1;
+                            }
                             nonzerotable[pos].emplace_back(bottom2+1);
+                            ++bombtable[bottom2+1];
+                            gameboard[(row-1)-(bottom2+1)][pos]= 1;
                             break;
                         }
                         case(3):{
-                            for(int j= 0; j<3; j++)
+                            for(int j= 0; j<3; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2);
+                                ++bombtable[bottom2];
+                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                            }
                             nonzerotable[pos+1].emplace_back(bottom2+1);
+                            ++bombtable[bottom2+1];
+                            gameboard[(row-1)-(bottom2+1)][pos+1]= 1;
                             break;
                         }
                         case(4):{
-                            for(int i= 0; i<3; i++)
+                            for(int i= 0; i<3; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                            }
                             nonzerotable[pos+1].emplace_back(bottom2+1);
+                            ++bombtable[bottom2+1];
+                            gameboard[(row-1)-(bottom2+1)][pos+1]= 1;
                             break;
                         }
                         default:
@@ -809,6 +933,10 @@ void Table::update_nonzerotable(Block block){
                             for(int j= 0; j<2; j++){
                                 nonzerotable[pos+j].emplace_back(bottom2+1);
                                 nonzerotable[pos+1+j].emplace_back(bottom2);
+                                ++bombtable[bottom2+1];
+                                ++bombtable[bottom2];
+                                gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                                gameboard[(row-1)-(bottom2)][pos+1+j]= 1;
                             }
                             break;
                         }
@@ -816,6 +944,10 @@ void Table::update_nonzerotable(Block block){
                             for(int i= 0; i<2; i++){
                                 nonzerotable[pos].emplace_back(bottom2+i);
                                 nonzerotable[pos+1].emplace_back(bottom2+1+i);
+                                ++bombtable[bottom2+i];
+                                ++bombtable[bottom2+1+i];
+                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                                gameboard[(row-1)-(bottom2+1+i)][pos+1]= 1;
                             }
                             break;
                         }
@@ -824,9 +956,15 @@ void Table::update_nonzerotable(Block block){
                     }
                     break;
                 }
-                default:{
-                    game_over(1);
+                case(69):{
+                    game_over(0);
+                    break;
                 }
+                default:
+                    game_over(1);
+            }
+            for(int i= 0; i<col; i++){
+                sort_table(i);
             }
             for(int i= 0; i<col; i++){
                 sort_table(i);
