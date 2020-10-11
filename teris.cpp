@@ -966,5 +966,8 @@ void Table::update_table(Block block){
             for(int i= 0; i<col; i++){
                 sort_table(i);
             }
+            for(int i= 0; i<col; i++){
+                sort_table(i);
+            }
         }
 
