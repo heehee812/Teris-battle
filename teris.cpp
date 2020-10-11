@@ -137,7 +137,7 @@ class Table{
 
 /*---------------main function-----------------*/
 int main(int argc, char *argv[]){
-    char row[3], col[3], shape[3], pos1[4], pos2[4];
+    char row[3], col[5], shape[4], pos1[4], pos2[5];
     int isbomb= 0;
 
     //load in a test case
@@ -158,6 +158,10 @@ int main(int argc, char *argv[]){
             break;
         //load in block   
         read_file(shape, pos1, pos2, &ifile);
+        if(shape[0]==69){
+            game_over(0);
+            break;
+        }
         int pos1i= string_to_int(pos1)-1;
         int pos2i= string_to_int(pos2);
 
@@ -186,17 +190,25 @@ int main(int argc, char *argv[]){
                 gb.bomb_gameboard(count);
                 table.bomb_nonzerotable(count);
                 table.bomb_bombtable(count);
+                // cout<<"--------After check----------"<<endl;
+                // table.print_nonzerotable();
+                // table.print_bombtable();
+                // gb.print_gameboard(); 
             }
             else
             {
                 count++;
             }
-            
         }
+        cout<<"--------Result----------"<<endl;
+        table.print_nonzerotable();
+        table.print_bombtable();
+        gb.print_gameboard();
     }
-    table.print_nonzerotable();
-    table.print_bombtable();
-    gb.print_gameboard();
+    // cout<<"--------Result----------"<<endl;
+    // table.print_nonzerotable();
+    // table.print_bombtable();
+    // gb.print_gameboard();
     ifile.close();
     return 0;
 }
@@ -205,12 +217,8 @@ int main(int argc, char *argv[]){
 /*------------shared function--------------*/
 void read_file(char *shape, char *pos1, char *pos2, fstream *ifile){
     (*ifile).getline(shape, sizeof(shape), ' ');
-    if(shape[0]== 69)
-        game_over(0);
-    else{
-        (*ifile).getline(pos1, sizeof(pos1), ' ');
-        (*ifile).getline(pos2, sizeof(pos2), '\n');
-    }
+    (*ifile).getline(pos1, sizeof(pos1), ' ');
+    (*ifile).getline(pos2, sizeof(pos2), '\n');
 }
 
 int string_to_int(const char *word){
