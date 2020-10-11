@@ -122,8 +122,18 @@ class Table{
             return 0;
         }
         //---------deal with the check---------
-        void bomb_nonzerotable(){
-
+        void bomb_nonzerotable(int i){
+            if(i== 0){
+                cout<<"in n"<<endl;
+                for(int c= 0; c<col; c++){
+                    nonzerotable[c].erase(nonzerotable[c].begin()+i+1);
+                    for(int r= i+1; r<nonzerotable[c].size(); r++){
+                        --nonzerotable[c][r];
+                        cout<<nonzerotable[c][r]<<" ";
+                    }
+                    cout<<endl;
+                }
+            }
         }
         void bomb_bombtable(){
 
@@ -187,6 +197,7 @@ int main(){
             isbomb= table.check_isbomb(i);
             if(isbomb){
                 gb.bomb_gameboard(i);
+                table.bomb_nonzerotable(i);
                 cout<<"----after check------"<<endl;
                 table.print_nonzerotable();
                 cout<<endl;
