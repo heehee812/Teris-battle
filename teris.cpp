@@ -36,12 +36,11 @@ class GameBoard{
             }
         }
         void bomb_gameboard(int i){
-            cout<<"i: "<<i<<endl;
             if(i==0){
+                cout<<"ii: "<<i<<endl;
                 vector<Col> tmp= gameboard;
                 tmp.erase(tmp.begin()+row-1-i);
                 gameboard= tmp;
-                row--; 
                 vector<int> v;
                 v.resize(col, 0);
                 gameboard.insert(gameboard.begin(),v); 
@@ -172,25 +171,38 @@ int main(){
 
         //update gameboard, bombtable and nonzerotable
         table.update_table(block);
+
+        cout<<"----before check----"<<endl;
         table.print_nonzerotable();
         cout<<endl;
         table.print_bombtable();
         cout<<endl;
         gb.print_gameboard();
         cout<<endl;
+
+
+
         for(int i= 0; i<rowi; i++){
+            cout<<"i: "<<i<<endl;
             isbomb= table.check_isbomb(i);
             if(isbomb){
                 gb.bomb_gameboard(i);
+                cout<<"----after check------"<<endl;
+                table.print_nonzerotable();
+                cout<<endl;
+                table.print_bombtable();
+                cout<<endl;
+                gb.print_gameboard();
+                cout<<endl;
             }
         }
     }
-    table.print_nonzerotable();
-    cout<<endl;
-    table.print_bombtable();
-    cout<<endl;
-    gb.print_gameboard();
-    cout<<endl;
+    // table.print_nonzerotable();
+    // cout<<endl;
+    // table.print_bombtable();
+    // cout<<endl;
+    // gb.print_gameboard();
+    // cout<<endl;
     ifile.close();
     return 0;
 }
