@@ -34,17 +34,15 @@ class GameBoard{
                 }
                 cout<<endl;
             }
+            cout<<endl;
         }
         void bomb_gameboard(int i){
-            if(i==0){
-                cout<<"ii: "<<i<<endl;
                 vector<Col> tmp= gameboard;
                 tmp.erase(tmp.begin()+row-1-i);
                 gameboard= tmp;
                 vector<int> v;
                 v.resize(col, 0);
                 gameboard.insert(gameboard.begin(),v); 
-            }
         }
 };
 
@@ -68,7 +66,7 @@ class Table{
     private:
         int row, col;
         vector<Col> nonzerotable, &gameboard;
-        map<int, int> bombtable;
+        vector<int> bombtable;
     public:
         Table(int n, int m, vector<Col> &gb): row(n), col(m), gameboard(gb){
             nonzerotable.reserve(col);
@@ -76,7 +74,7 @@ class Table{
                 nonzerotable[i].emplace_back(-1);
             }
             for(int i= 0; i<row; i++){
-                bombtable.insert(Pair(i, 0));
+                bombtable.emplace_back(0);
             }
         }
         int get_bottom(int pos1){
@@ -96,6 +94,7 @@ class Table{
                     cout << j << " ";
                 cout << '\n';
             }
+            cout<<endl;
         }
         void print_bombtable(){
             cout<<"bombtable: ";
@@ -122,11 +121,17 @@ class Table{
             return 0;
         }
         //---------deal with the check---------
-        void bomb_nonzerotable(){
-
+        void bomb_nonzerotable(int i){
+                for(int c= 0; c<col; c++){
+                    nonzerotable[c].erase(nonzerotable[c].begin()+i+1);
+                    for(int r= i+1; r<nonzerotable[c].size(); r++){
+                        --nonzerotable[c][r];
+                    }
+                }
         }
-        void bomb_bombtable(){
-
+        void bomb_bombtable(int i){
+            bombtable.erase(bombtable.begin()+i);
+            bombtable.emplace_back(0);
         }
 };
 
@@ -172,37 +177,26 @@ int main(){
         //update gameboard, bombtable and nonzerotable
         table.update_table(block);
 
-        cout<<"----before check----"<<endl;
-        table.print_nonzerotable();
-        cout<<endl;
-        table.print_bombtable();
-        cout<<endl;
-        gb.print_gameboard();
-        cout<<endl;
-
-
-
-        for(int i= 0; i<rowi; i++){
-            cout<<"i: "<<i<<endl;
-            isbomb= table.check_isbomb(i);
+        //chek if isbomb
+        int i= rowi;
+        int count= 0;//row that should be check
+        while(i--){
+            isbomb= table.check_isbomb(count);
             if(isbomb){
-                gb.bomb_gameboard(i);
-                cout<<"----after check------"<<endl;
-                table.print_nonzerotable();
-                cout<<endl;
-                table.print_bombtable();
-                cout<<endl;
-                gb.print_gameboard();
-                cout<<endl;
+                gb.bomb_gameboard(count);
+                table.bomb_nonzerotable(count);
+                table.bomb_bombtable(count);
             }
+            else
+            {
+                count++;
+            }
+            
         }
     }
-    // table.print_nonzerotable();
-    // cout<<endl;
-    // table.print_bombtable();
-    // cout<<endl;
-    // gb.print_gameboard();
-    // cout<<endl;
+    table.print_nonzerotable();
+    table.print_bombtable();
+    gb.print_gameboard();
     ifile.close();
     return 0;
 }
