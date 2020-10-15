@@ -108,8 +108,6 @@ class Table{
                 for(auto i: nonzerotable[it.first]){
                     if(i== it.second)
                         return 1;
-                    else
-                        return 0;
                 }
             }
             return 0;
@@ -166,20 +164,28 @@ int main(int argc, char *argv[]){
         int pos2i= string_to_int(pos2);
 
         //check if input invalid
-        if((pos1i+pos2i)>coli||(pos1i+pos2i)<0)
+        if((pos1i+pos2i)>coli||(pos1i+pos2i)<0){
+            game_over(1);
             break;
+        }
         //check if hit
         int bottom1= table.get_bottom(pos1i);
         Block block(pos1i, pos2i, bottom1, shape);
         Map hitset= block.create_hitset();
+        if(isend){
+            game_over(1);
+            break;
+        }
         if(!hitset.empty()){
             isend= table.check_ishit(hitset);
-            if(isend)
-                game_over(1);
         }
-
+        if(isend){
+            game_over(1);
+            break;
+        }
         //update gameboard, bombtable and nonzerotable
         table.update_table(block);
+        table.print_nonzerotable();
 
         //chek if isbomb
         int i= rowi;
@@ -196,11 +202,8 @@ int main(int argc, char *argv[]){
                 count++;
             }
         }
+        // gb.print_gameboard();
     }
-    cout<<"--------Result----------"<<endl;
-    table.print_nonzerotable();
-    table.print_bombtable();
-    gb.print_gameboard();
     ifile.close();
     return 0;
 }
