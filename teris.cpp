@@ -183,8 +183,13 @@ int main(int argc, char *argv[]){
             game_over(1);
             break;
         }
+
         //update gameboard, bombtable and nonzerotable
         table.update_table(block);
+        if(isend){
+            game_over(1);
+            break;
+        }
 
         //chek if isbomb
         int i= rowi;
@@ -201,6 +206,7 @@ int main(int argc, char *argv[]){
                 count++;
             }
         }
+
         // gb.print_gameboard();
     }
     ifile.close();
@@ -273,7 +279,6 @@ Map Block:: create_hitset(){
                             }
                             default:{
                                 cout<<"[Input Invalid] ";
-                                game_over(1);
                                 isend= 1;
                             }
                         }
@@ -318,7 +323,6 @@ Map Block:: create_hitset(){
                             }
                             default:{
                                 cout<<"[Input Invalid] ";
-                                game_over(1);
                                 isend= 1;
                             }
                         }
@@ -363,7 +367,6 @@ Map Block:: create_hitset(){
                             }
                             default:{
                                 cout<<"[Input Invalid] ";
-                                game_over(1);
                                 isend= 1;
                             }
                         }
@@ -400,7 +403,6 @@ Map Block:: create_hitset(){
                             }
                             default:{
                                 cout<<"[Input Invalid] ";
-                                game_over(1);
                                 isend= 1;
                             }
                         }
@@ -443,7 +445,6 @@ Map Block:: create_hitset(){
                             }
                             default:{
                                 cout<<"[Input Invalid] ";
-                                game_over(1);
                                 isend= 1;
                             }
                         }
@@ -473,14 +474,10 @@ Map Block:: create_hitset(){
                             }
                             default:{
                                 cout<<"[Input Invalid] ";
-                                game_over(1);
                                 isend= 1;
                             }
                         }
                         break;
-                    }
-                    case(69):{
-                        game_over(0);
                     }
                     default:{
                         game_over(1);
@@ -506,7 +503,6 @@ Map Block:: create_hitset(){
                             }
                             default:{
                                 cout<<"[Input Invalid] ";
-                                game_over(1);
                                 isend= 1;
                             }
                         }
@@ -549,7 +545,6 @@ Map Block:: create_hitset(){
                             }
                             default:{
                                 cout<<"[Input Invalid] ";
-                                game_over(1);
                                 isend= 1;
                             }
                         }
@@ -593,7 +588,6 @@ Map Block:: create_hitset(){
                             }
                             default:{
                                 cout<<"[Input Invalid] ";
-                                game_over(1);
                                 isend= 1;
                             }
                         }
@@ -631,7 +625,6 @@ Map Block:: create_hitset(){
                             }
                             default:{
                                 cout<<"[Input Invalid] ";
-                                game_over(1);
                                 isend= 1;
                             }
                         }
@@ -673,7 +666,6 @@ Map Block:: create_hitset(){
                             }
                             default:{
                                 cout<<"[Input Invalid] ";
-                                game_over(1);
                                 isend= 1;
                             }
                         }
@@ -702,14 +694,9 @@ Map Block:: create_hitset(){
                             }
                             default:{
                                 cout<<"[Input Invalid] ";
-                                game_over(1);
                                 isend= 1;
                             }
                         }
-                        break;
-                    }
-                    case(69):{
-                        game_over(0);
                         break;
                     }
                     default:{
@@ -729,23 +716,33 @@ void Table::update_table(Block block){
                 case(73):{ //I
                     switch(dir){
                         case(1):{
-                            for(int i=0; i<4; i++){
-                                nonzerotable[pos].emplace_back(bottom2+i);
-                                ++bombtable[bottom2+i];
-                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                            if(bottom2+ 3== row-1){
+                                isend= 1;
+                            }
+                            else{
+                                for(int i=0; i<4; i++){
+                                    nonzerotable[pos].emplace_back(bottom2+i);
+                                    ++bombtable[bottom2+i];
+                                    gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                                }
                             }
                             break;
                         }
                         case(2):{
-                            for(int j= 0; j<4; j++){
-                                nonzerotable[pos+j].emplace_back(bottom2);
-                                ++bombtable[bottom2];
-                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                            if(bottom2== row-1){
+                                isend= 1;
+                            }
+                            else{
+                                for(int j= 0; j<4; j++){
+                                    nonzerotable[pos+j].emplace_back(bottom2);
+                                    ++bombtable[bottom2];
+                                    gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                                }
                             }
                             break;
                         }
                         default:{
-                            game_over(1);
+                            isend= 1;
                         }
                     }
                     break;
@@ -753,128 +750,182 @@ void Table::update_table(Block block){
                 case(74):{ //J
                     switch(dir){
                         case(1):{
-                            for(int i= 0; i<3; i++){
-                                nonzerotable[pos+1].emplace_back(bottom2+i);
-                                ++bombtable[bottom2+i];
-                                gameboard[(row-1)-(bottom2+i)][pos+1]= 1;
+                            if(bottom2+ 2== row-1){
+                                isend= 1;
                             }
-                            nonzerotable[pos].emplace_back(bottom2);
-                            ++bombtable[bottom2];
-                            gameboard[(row-1)-(bottom2)][pos]= 1;
+                            else{
+                                for(int i= 0; i<3; i++){
+                                    nonzerotable[pos+1].emplace_back(bottom2+i);
+                                    ++bombtable[bottom2+i];
+                                    gameboard[(row-1)-(bottom2+i)][pos+1]= 1;
+                                }
+                                nonzerotable[pos].emplace_back(bottom2);
+                                ++bombtable[bottom2];
+                                gameboard[(row-1)-(bottom2)][pos]= 1;
+                            }
                             break;
                         }
                         case(2):{
-                            for(int j= 0; j<3; j++){
-                                nonzerotable[pos+j].emplace_back(bottom2);
-                                ++bombtable[bottom2];
-                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                            if(bottom2+ 1== row-1){
+                                isend= 1;
                             }
-                            nonzerotable[pos].emplace_back(bottom2+1);
-                            ++bombtable[bottom2+1];
-                            gameboard[(row-1)-(bottom2+1)][pos]= 1;
+                            else{
+                                for(int j= 0; j<3; j++){
+                                    nonzerotable[pos+j].emplace_back(bottom2);
+                                    ++bombtable[bottom2];
+                                    gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                                }
+                                nonzerotable[pos].emplace_back(bottom2+1);
+                                ++bombtable[bottom2+1];
+                                gameboard[(row-1)-(bottom2+1)][pos]= 1;
+                            }
                             break;
                         }
                         case(3):{
-                            for(int i= 0; i<3; i++){
-                                nonzerotable[pos].emplace_back(bottom2+i);
-                                ++bombtable[bottom2+i];
-                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                            if(bottom2+ 2== row-1){
+                                isend= 1;
                             }
-                            nonzerotable[pos+1].emplace_back(bottom2+2);
-                            ++bombtable[bottom2+2];
-                            gameboard[(row-1)-(bottom2+2)][pos+1]= 1;
+                            else{
+                                for(int i= 0; i<3; i++){
+                                    nonzerotable[pos].emplace_back(bottom2+i);
+                                    ++bombtable[bottom2+i];
+                                    gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                                }
+                                nonzerotable[pos+1].emplace_back(bottom2+2);
+                                ++bombtable[bottom2+2];
+                                gameboard[(row-1)-(bottom2+2)][pos+1]= 1;
+                            }
                             break;
                         }
                         case(4):{
-                            for(int j= 0; j<3; j++){
-                                nonzerotable[pos+j].emplace_back(bottom2);
-                                ++bombtable[bottom2];
-                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                            if(bottom2== row-1){
+                                isend= 1;
                             }
-                            nonzerotable[pos+2].emplace_back(bottom2-1);
-                            ++bombtable[bottom2-1];
-                            gameboard[(row-1)-(bottom2-1)][pos+2]= 1;
+                            else{
+                                for(int j= 0; j<3; j++){
+                                    nonzerotable[pos+j].emplace_back(bottom2);
+                                    ++bombtable[bottom2];
+                                    gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                                }
+                                nonzerotable[pos+2].emplace_back(bottom2-1);
+                                ++bombtable[bottom2-1];
+                                gameboard[(row-1)-(bottom2-1)][pos+2]= 1;
+                            }
                             break;
                         }
                         default:
-                            game_over(1);
+                            isend= 1;
                     }
                     break;
                 }
                 case(76):{ //L
                     switch(dir){
                         case(1):{
-                            for(int i= 0; i<3; i++){
-                                nonzerotable[pos].emplace_back(bottom2+i);
-                                ++bombtable[bottom2+i];
-                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                            if(bottom2+ 2== row-1){
+                                isend= 1;
                             }
-                            nonzerotable[pos+1].emplace_back(bottom2);
-                            ++bombtable[bottom2];
-                            gameboard[(row-1)-(bottom2)][pos+1]= 1;
+                            else{
+                                for(int i= 0; i<3; i++){
+                                    nonzerotable[pos].emplace_back(bottom2+i);
+                                    ++bombtable[bottom2+i];
+                                    gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                                }
+                                nonzerotable[pos+1].emplace_back(bottom2);
+                                ++bombtable[bottom2];
+                                gameboard[(row-1)-(bottom2)][pos+1]= 1;
+                            }
                             break;
                         }
                         case(2):{
-                            for(int j= 0; j<3; j++){
-                                nonzerotable[pos+j].emplace_back(bottom2+1);
-                                ++bombtable[bottom2+1];
-                                gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                            if(bottom2+ 1== row-1){
+                                isend= 1;
                             }
-                            nonzerotable[pos].emplace_back(bottom2);
-                            ++bombtable[bottom2];
-                            gameboard[(row-1)-(bottom2)][pos]= 1;
+                            else{
+                                for(int j= 0; j<3; j++){
+                                    nonzerotable[pos+j].emplace_back(bottom2+1);
+                                    ++bombtable[bottom2+1];
+                                    gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                                }
+                                nonzerotable[pos].emplace_back(bottom2);
+                                ++bombtable[bottom2];
+                                gameboard[(row-1)-(bottom2)][pos]= 1;
+                            }
                             break;
                         }
                         case(3):{
-                            for(int i= 0; i<3; i++){
-                                nonzerotable[pos+1].emplace_back(bottom2-2+i);
-                                ++bombtable[bottom2-2+i];
-                                gameboard[(row-1)-(bottom2-2+i)][pos+1]= 1;
+                            if(bottom2== row-1){
+                                isend= 1;
                             }
-                            nonzerotable[pos].emplace_back(bottom2);
-                            ++bombtable[bottom2];
-                            gameboard[(row-1)-(bottom2)][pos]= 1;
+                            else{
+                                for(int i= 0; i<3; i++){
+                                    nonzerotable[pos+1].emplace_back(bottom2-2+i);
+                                    ++bombtable[bottom2-2+i];
+                                    gameboard[(row-1)-(bottom2-2+i)][pos+1]= 1;
+                                }
+                                nonzerotable[pos].emplace_back(bottom2);
+                                ++bombtable[bottom2];
+                                gameboard[(row-1)-(bottom2)][pos]= 1;
+                            }
                             break;
                         }
                         case(4):{
-                            for(int j= 0; j<3; j++){
-                                nonzerotable[pos+j].emplace_back(bottom2+1);
-                                ++bombtable[bottom2+1];
-                                gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                            if(bottom2+ 1== row-1){
+                                isend= 1;
                             }
-                            nonzerotable[pos+2].emplace_back(bottom2);
-                            ++bombtable[bottom2];
-                            gameboard[(row-1)-(bottom2)][pos+2]= 1;
+                            else{
+                                for(int j= 0; j<3; j++){
+                                    nonzerotable[pos+j].emplace_back(bottom2+1);
+                                    ++bombtable[bottom2+1];
+                                    gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                                }
+                                nonzerotable[pos+2].emplace_back(bottom2);
+                                ++bombtable[bottom2];
+                                gameboard[(row-1)-(bottom2)][pos+2]= 1;
+                            }
                             break;
                         }
                         default:
-                            game_over(1);
+                            isend= 1;
                     }
                     break;
                 } 
                 case(79):{ //O
-                    for(int i= 0; i<2; i++)
-                        for(int j=0; j<2; j++){
-                            nonzerotable[pos+j].emplace_back(bottom2+i);
-                            ++bombtable[bottom2+i];
-                            gameboard[(row-1)-(bottom2+i)][pos+j]= 1;
-                        }
+                    if(bottom2+ 1== row-1){
+                                isend= 1;
+                    }
+                    else{
+                        for(int i= 0; i<2; i++)
+                            for(int j=0; j<2; j++){
+                                nonzerotable[pos+j].emplace_back(bottom2+i);
+                                ++bombtable[bottom2+i];
+                                gameboard[(row-1)-(bottom2+i)][pos+j]= 1;
+                            }
+                    }
                     break;
                 }
                 case(83):{ //S
                     switch(dir){
                         case(1):{
-                            for(int j= 0; j<2; j++){
-                                nonzerotable[pos+j].emplace_back(bottom2);
-                                nonzerotable[pos+1+j].emplace_back(bottom2+1);
-                                ++bombtable[bottom2];
-                                ++bombtable[bottom2+1];
-                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
-                                gameboard[(row-1)-(bottom2+1)][pos+1+j]= 1;
+                            if(bottom2+ 1== row-1){
+                                isend= 1;
+                            }
+                            else{
+                                for(int j= 0; j<2; j++){
+                                    nonzerotable[pos+j].emplace_back(bottom2);
+                                    nonzerotable[pos+1+j].emplace_back(bottom2+1);
+                                    ++bombtable[bottom2];
+                                    ++bombtable[bottom2+1];
+                                    gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                                    gameboard[(row-1)-(bottom2+1)][pos+1+j]= 1;
+                                }
                             }
                             break;
                         }
                         case(2):{
+                            if(bottom2+ 1== row-1){
+                            isend= 1;
+                            }
+                            else{
                                 for(int i= 0; i<2; i++){
                                     nonzerotable[pos].emplace_back(bottom2+i);
                                     nonzerotable[pos+1].emplace_back(bottom2+i-1);
@@ -883,99 +934,126 @@ void Table::update_table(Block block){
                                     gameboard[(row-1)-(bottom2+i)][pos]= 1;
                                     gameboard[(row-1)-(bottom2+i-1)][pos+1]= 1;
                                 }
+                            }
                             break;
                         }
                         default:
-                            game_over(1);
+                            isend= 1;
                     }
                     break;
                 }
                 case(84):{ //T
                     switch(dir){
                         case(1):{
-                            for(int j= 0; j<3; j++){
-                                nonzerotable[pos+j].emplace_back(bottom2+1);
-                                ++bombtable[bottom2+1];
-                                gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
-                                }
-                            nonzerotable[pos+1].emplace_back(bottom2);
-                            ++bombtable[bottom2];
-                            gameboard[(row-1)-(bottom2)][pos+1]= 1;
+                            if(bottom2+ 1== row-1){
+                                isend= 1;
+                            }
+                            else{
+                                for(int j= 0; j<3; j++){
+                                    nonzerotable[pos+j].emplace_back(bottom2+1);
+                                    ++bombtable[bottom2+1];
+                                    gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                                    }
+                                nonzerotable[pos+1].emplace_back(bottom2);
+                                ++bombtable[bottom2];
+                                gameboard[(row-1)-(bottom2)][pos+1]= 1;
+                            }
                             break;
                         }
                         case(2):{
-                            for(int i= 0; i<3; i++){
-                                nonzerotable[pos+1].emplace_back(bottom2-1+i);
-                                ++bombtable[bottom2-1+i];
-                                gameboard[(row-1)-(bottom2-1+i)][pos+1]= 1;
+                            if(bottom2+ 1== row-1){
+                                isend= 1;
                             }
-                            nonzerotable[pos].emplace_back(bottom2);
-                            ++bombtable[bottom2];
-                            gameboard[(row-1)-(bottom2)][pos]= 1;
+                            else{
+                                for(int i= 0; i<3; i++){
+                                    nonzerotable[pos+1].emplace_back(bottom2-1+i);
+                                    ++bombtable[bottom2-1+i];
+                                    gameboard[(row-1)-(bottom2-1+i)][pos+1]= 1;
+                                }
+                                nonzerotable[pos].emplace_back(bottom2);
+                                ++bombtable[bottom2];
+                                gameboard[(row-1)-(bottom2)][pos]= 1;
+                            }
                             break;
                         }
                         case(3):{
-                            for(int j= 0; j<3; j++){
-                                nonzerotable[pos+j].emplace_back(bottom2);
-                                ++bombtable[bottom2];
-                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                            if(bottom2+ 1== row-1){
+                                isend= 1;
                             }
-                            nonzerotable[pos+1].emplace_back(bottom2+1);
-                            ++bombtable[bottom2+1];
-                            gameboard[(row-1)-(bottom2+1)][pos+1]= 1;
+                            else{
+                                for(int j= 0; j<3; j++){
+                                    nonzerotable[pos+j].emplace_back(bottom2);
+                                    ++bombtable[bottom2];
+                                    gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                                }
+                                nonzerotable[pos+1].emplace_back(bottom2+1);
+                                ++bombtable[bottom2+1];
+                                gameboard[(row-1)-(bottom2+1)][pos+1]= 1;
+                            }
                             break;
                         }
                         case(4):{
-                            for(int i= 0; i<3; i++){
-                                nonzerotable[pos].emplace_back(bottom2+i);
-                                ++bombtable[bottom2+i];
-                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                            if(bottom2+ 2== row-1){
+                                isend= 1;
                             }
-                            nonzerotable[pos+1].emplace_back(bottom2+1);
-                            ++bombtable[bottom2+1];
-                            gameboard[(row-1)-(bottom2+1)][pos+1]= 1;
+                            else{
+                                for(int i= 0; i<3; i++){
+                                    nonzerotable[pos].emplace_back(bottom2+i);
+                                    ++bombtable[bottom2+i];
+                                    gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                                }
+                                nonzerotable[pos+1].emplace_back(bottom2+1);
+                                ++bombtable[bottom2+1];
+                                gameboard[(row-1)-(bottom2+1)][pos+1]= 1;
+                            }
                             break;
                         }
                         default:
-                            game_over(1);
+                            isend= 1;
                     }
                     break;
                 }
                 case(90):{ //Z
                     switch(dir){
                         case(1):{
-                            for(int j= 0; j<2; j++){
-                                nonzerotable[pos+j].emplace_back(bottom2);
-                                nonzerotable[pos+1+j].emplace_back(bottom2-1);
-                                ++bombtable[bottom2];
-                                ++bombtable[bottom2-1];
-                                gameboard[(row-1)-(bottom2)][pos+j]= 1;
-                                gameboard[(row-1)-(bottom2-1)][pos+1+j]= 1;
+                            if(bottom2== row-1){
+                                isend= 1;
+                            }
+                            else{
+                                for(int j= 0; j<2; j++){
+                                    nonzerotable[pos+j].emplace_back(bottom2);
+                                    nonzerotable[pos+1+j].emplace_back(bottom2-1);
+                                    ++bombtable[bottom2];
+                                    ++bombtable[bottom2-1];
+                                    gameboard[(row-1)-(bottom2)][pos+j]= 1;
+                                    gameboard[(row-1)-(bottom2-1)][pos+1+j]= 1;
+                                }
                             }
                             break;
                         }
                         case(2):{
-                            for(int i= 0; i<2; i++){
-                                nonzerotable[pos].emplace_back(bottom2+i);
-                                nonzerotable[pos+1].emplace_back(bottom2+1+i);
-                                ++bombtable[bottom2+i];
-                                ++bombtable[bottom2+1+i];
-                                gameboard[(row-1)-(bottom2+i)][pos]= 1;
-                                gameboard[(row-1)-(bottom2+1+i)][pos+1]= 1;
+                            if(bottom2+ 1== row-1){
+                                isend= 1;
+                            }
+                            else{
+                                for(int i= 0; i<2; i++){
+                                    nonzerotable[pos].emplace_back(bottom2+i);
+                                    nonzerotable[pos+1].emplace_back(bottom2+1+i);
+                                    ++bombtable[bottom2+i];
+                                    ++bombtable[bottom2+1+i];
+                                    gameboard[(row-1)-(bottom2+i)][pos]= 1;
+                                    gameboard[(row-1)-(bottom2+1+i)][pos+1]= 1;
+                                }
                             }
                             break;
                         }
                         default:
-                            game_over(1);
+                            isend= 1;
                     }
                     break;
                 }
-                case(69):{
-                    game_over(0);
-                    break;
-                }
                 default:
-                    game_over(1);
+                    isend= 1;
             }
             for(int i= 0; i<col; i++){
                 sort_table(i);
