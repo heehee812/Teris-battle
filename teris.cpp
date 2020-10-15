@@ -26,15 +26,19 @@ class GameBoard{
             gameboard.resize(row, vector<int>(col, 0));
         }
 
-        void print_gameboard(){
-            cout<<"gameboard: "<<endl;
-            for(int i=0; i<row; i++){
-                for(int j= 0; j<col; j++){
-                    cout<<gameboard[i][j];
+        void print_gameboard(string filepath){
+        // string filepath= "c:\\"+filename+"_output.txt";
+            ofstream ofile(filepath, ios::out);
+            if(ofile.is_open()){
+                ofile<<"gameboard: "<<endl;
+                for(int i=0; i<row; i++){
+                    for(int j= 0; j<col; j++){
+                        ofile<<gameboard[i][j];
+                    }
+                    ofile<<endl;
                 }
-                cout<<endl;
-            }
-            cout<<endl;
+                ofile<<endl;
+                }
         }
         void bomb_gameboard(int i){
                 vector<Col> tmp= gameboard;
@@ -200,6 +204,8 @@ int main(int argc, char *argv[]){
             }
         }
     }
+    string filepath="/Users/exosite/Desktop/enyu/data/teris/Teris-battle/test.txt";
+    gb.print_gameboard(filepath);
     ifile.close();
     return 0;
 }
