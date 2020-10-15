@@ -18,7 +18,7 @@ class GameBoard{
     public:
         vector<Col> gameboard;
         GameBoard(int n, int m): row(n), col(m){
-            cout<<"---------------Start------------------"<<endl;
+            // cout<<"---------------Start------------------"<<endl;
             new_gameboard(row, col);
         }
         GameBoard(){}
@@ -148,10 +148,6 @@ int main(int argc, char *argv[]){
     
     //load in a test case
     while(!ifile.eof()){
-        cout<<"=========="<<endl;
-        gb.print_gameboard();
-        table.print_nonzerotable();
-        table.print_bombtable();
         if(isend)
             break;
         //load in block   
@@ -167,7 +163,6 @@ int main(int argc, char *argv[]){
             game_over(1);
             break;
         }
-
         //check if hit
         int bottom1= table.get_bottom(pos1i, shape);
         Block block(pos1i, pos2i, bottom1, shape);
@@ -183,14 +178,12 @@ int main(int argc, char *argv[]){
             game_over(1);
             break;
         }
-
         //update gameboard, bombtable and nonzerotable
         table.update_table(block, bottom1);
         if(isend){
             game_over(1);
             break;
         }
-
         //chek if isbomb
         int i= rowi;
         int count= 0;//row that should be check
@@ -206,10 +199,7 @@ int main(int argc, char *argv[]){
                 count++;
             }
         }
-
-        // gb.print_gameboard();
     }
-    gb.print_gameboard();
     ifile.close();
     return 0;
 }
@@ -245,10 +235,10 @@ int string_to_int(const char *word){
 }
 
 void game_over(int i){
-    if(i)
-        cout<<"---------------GAME OVER------------------"<<endl;
-    else
-        cout<<"---------------End------------------"<<endl;
+    // if(i)
+    //     cout<<"---------------GAME OVER------------------"<<endl;
+    // else
+    //     cout<<"---------------End------------------"<<endl;
     isend= 1;
 }
 
@@ -272,7 +262,7 @@ Map Block:: create_hitset(){
                             }
                             case(2):{
                                 for(int j= 1; j<= pos2; j++){
-                                    hitset.insert(Pair(lpos+3+j, bottom1));
+                                    hitset.insert(Pair(pos1+3+j, bottom1));
                                 }
                                 break;
                             }
@@ -813,7 +803,6 @@ int Table::get_bottom(int pos1,  char *kind){
             switch(dir){
                 case(1):{
                     int x= nonzerotable[++pos1].size()-1;
-                    cout<<"x: "<<nonzerotable[pos1][x]+1<<endl;
                     if(nonzerotable[pos1][x]+1 >bottom){
                         bottom= nonzerotable[pos1][x]+1;
                         }
