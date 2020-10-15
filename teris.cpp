@@ -152,6 +152,9 @@ int main(int argc, char *argv[]){
     
     //load in a test case
     while(!ifile.eof()){
+        gb.print_gameboard();
+        table.print_nonzerotable();
+        table.print_bombtable();
         if(isend)
             break;
         //load in block   
@@ -209,6 +212,7 @@ int main(int argc, char *argv[]){
 
         // gb.print_gameboard();
     }
+    gb.print_gameboard();
     ifile.close();
     return 0;
 }
