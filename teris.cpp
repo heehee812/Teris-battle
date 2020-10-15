@@ -162,12 +162,12 @@ int main(int argc, char *argv[]){
         }
         int pos1i= string_to_int(pos1)-1;
         int pos2i= string_to_int(pos2);
-
         //check if input invalid
-        if((pos1i+pos2i)>coli||(pos1i+pos2i)<0){
+        if((pos1i+pos2i)>coli-1||(pos1i+pos2i)<0){
             game_over(1);
             break;
         }
+
         //check if hit
         int bottom1= table.get_bottom(pos1i);
         Block block(pos1i, pos2i, bottom1, shape);
