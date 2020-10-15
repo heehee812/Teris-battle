@@ -77,10 +77,7 @@ class Table{
                 bombtable.emplace_back(0);
             }
         }
-        int get_bottom(int pos1){
-            int end= nonzerotable[pos1].size()-1;
-            return nonzerotable[pos1][end]+1;
-        }
+        int get_bottom(int pos1, char *shape);
         void update_table(Block block);
         void sort_table(int sortrow){
             sort(nonzerotable[sortrow].begin(), nonzerotable[sortrow].end());
@@ -88,8 +85,8 @@ class Table{
         //---------print---------
         void print_nonzerotable(){
             cout<<"nonzerotable: "<<endl;
-            for(int i= 0; i<col; i++)
-            {
+            for(int i= 0; i<col; i++){
+                cout<<"i: "<<i<<endl;
                 for (auto j: nonzerotable[i])
                     cout << j << " ";
                 cout << '\n';
@@ -152,6 +149,7 @@ int main(int argc, char *argv[]){
     
     //load in a test case
     while(!ifile.eof()){
+        cout<<"=========="<<endl;
         gb.print_gameboard();
         table.print_nonzerotable();
         table.print_bombtable();
@@ -170,15 +168,23 @@ int main(int argc, char *argv[]){
             game_over(1);
             break;
         }
-
+        cout<<"0."<<endl;
+        table.print_nonzerotable();
+        cout<<"-----"<<endl;
         //check if hit
-        int bottom1= table.get_bottom(pos1i);
+        int bottom1= table.get_bottom(pos1i, shape);
         Block block(pos1i, pos2i, bottom1, shape);
+        cout<<"1."<<endl;
+        table.print_nonzerotable();
+        cout<<"-----"<<endl;
         Map hitset= block.create_hitset();
         if(isend){
             game_over(1);
             break;
         }
+        cout<<"2."<<endl;
+        table.print_nonzerotable();
+        cout<<"-----"<<endl;
         if(!hitset.empty()){
             isend= table.check_ishit(hitset);
         }
@@ -186,14 +192,15 @@ int main(int argc, char *argv[]){
             game_over(1);
             break;
         }
-
+        cout<<"3."<<endl;
+        table.print_nonzerotable();
+        cout<<"-----"<<endl;
         //update gameboard, bombtable and nonzerotable
         table.update_table(block);
         if(isend){
             game_over(1);
             break;
         }
-
         //chek if isbomb
         int i= rowi;
         int count= 0;//row that should be check
@@ -270,6 +277,7 @@ Map Block:: create_hitset(){
                                 for(int i= 0; i<4; i++){
                                     for(int j= 1; j<= pos2; j++){
                                         hitset.insert(Pair(lpos+j, bottom1+i));
+                                        // cout<<lpos+j<<", "<<bottom1+i<<endl;
                                     }
                                 }
                                 break;
@@ -415,10 +423,12 @@ Map Block:: create_hitset(){
                     case(84):{ //T
                         switch(dir){
                             case(1):{
-                                lpos= pos1+1;
                                 for(int j=1; j<= pos2; j++){
-                                    hitset.insert(Pair(lpos+j, bottom1+1));
-                                    hitset.insert(Pair(pos1+j, bottom1));
+                                    cout<<"pos1: "<<pos1<<", bottom1: "<<bottom1<<endl;
+                                    hitset.insert(Pair(pos1+1+j, bottom1-1));
+                                    hitset.insert(Pair(pos1+2+j, bottom1));
+                                    cout<<pos1+1+j<<", "<<bottom1-1<<endl;
+                                    cout<<pos1+2+j<<", "<<bottom1<<endl;
                                 }
                                 break;
                             }
@@ -711,10 +721,210 @@ Map Block:: create_hitset(){
             return hitset;   
         }
 
+int Table::get_bottom(int pos1,  char *kind){
+    int end= nonzerotable[pos1].size()-1;
+    int bottom= nonzerotable[pos1][end];
+    int dir= kind[1]-'0';
+    switch(kind[0]){
+        case(73):{ //I
+            switch(dir){
+                case(1):{
+                    break;
+                }
+                case(2):{
+                    int x;
+                    for(int i= 1; i<=3; i++){
+                        x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x] >bottom)
+                            bottom= nonzerotable[pos1][x];
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+        case(74):{ //J
+            switch(dir){
+                case(1):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
+                    break;
+                }
+                case(2):{
+                    int x;
+                    for(int i= 1; i<=2; i++){
+                        x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x] >bottom)
+                            bottom= nonzerotable[pos1][x];
+                    }
+                    break;
+                }
+                case(3):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]-2 >bottom)
+                        bottom= nonzerotable[pos1][x]-2;
+                    break;
+                }
+                case(4):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
+                    else{
+                        x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x]+1 >bottom)
+                            bottom= nonzerotable[pos1][x]+1;
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+        case(76):{ //L
+            switch(dir){
+                case(1):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
+                break;
+                }
+                case(2):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    for(int i= 0; i<=1; i++)
+                        if(nonzerotable[pos1][x]-1 >bottom)
+                            bottom= nonzerotable[pos1][x]-1;
+                    break;
+                }
+                case(3):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]-2 >bottom)
+                        bottom= nonzerotable[pos1][x]-2;;
+                    break;
+                }
+                case(4):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    for(int i= 0; i<=2; i++)
+                        if(nonzerotable[pos1][x] >bottom)
+                            bottom= nonzerotable[pos1][x];
+                    break;
+                }
+            }
+            break;
+        }
+        case(79):{ //O
+            int x;
+            x= nonzerotable[++pos1].size()-1;
+            if(nonzerotable[pos1][x] >bottom)
+                bottom= nonzerotable[pos1][x];
+            break;
+        }
+        case(83):{ //S
+            switch(dir){
+                case(1):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
+                    else{
+                        x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x]-1 >bottom)
+                            bottom= nonzerotable[pos1][x]-1;
+                    }
+                    break;
+                }
+                case(2):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]+1 >bottom)
+                        bottom= nonzerotable[pos1][x]+1;
+                    break;
+                }
+            }
+            break;
+        }
+        case(84):{ //T
+            switch(dir){
+                case(1):{
+                    int x= nonzerotable[++pos1].size()-1;
+                    cout<<"x: "<<nonzerotable[pos1][x]+1<<endl;
+                    if(nonzerotable[pos1][x]+1 >bottom){
+                        bottom= nonzerotable[pos1][x]+1;
+                        }
+                    else{
+                        x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
+                    }
+                break;
+                }
+                case(2):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]+1 >bottom)
+                        bottom= nonzerotable[pos1][x]+1;
+                    break;
+                }
+                case(3):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]-1 >bottom)
+                        bottom= nonzerotable[pos1][x]-1;
+                    else{
+                         x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
+                    }
+                    break;
+                }
+                case(4):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]-1 >bottom)
+                        bottom= nonzerotable[pos1][x]-1;
+                    break;
+                }
+            }
+            break;
+        }
+        case(90):{ //Z
+            switch(dir){
+                case(1):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]+1 >bottom)
+                        bottom= nonzerotable[pos1][x]+1;
+                    else{
+                        x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x]+1 >bottom)
+                        bottom= nonzerotable[pos1][x]+1;
+                    }
+                break;
+                }
+                case(2):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]-1 >bottom)
+                        bottom= nonzerotable[pos1][x]-1;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    return bottom+1;
+}
+
 void Table::update_table(Block block){
             int pos= block.get_pos();
-            int bottom2= get_bottom(pos);
             char *kind= block.get_kind();
+            int bottom2= get_bottom(pos, kind);
             int dir= kind[1]-'0';
             switch(kind[0]){
                 case(73):{ //I
@@ -954,13 +1164,13 @@ void Table::update_table(Block block){
                             }
                             else{
                                 for(int j= 0; j<3; j++){
-                                    nonzerotable[pos+j].emplace_back(bottom2+1);
-                                    ++bombtable[bottom2+1];
-                                    gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                                    nonzerotable[pos+j].emplace_back(bottom2);
+                                    ++bombtable[bottom2];
+                                    gameboard[(row-1)-(bottom2)][pos+j]= 1;
                                     }
-                                nonzerotable[pos+1].emplace_back(bottom2);
-                                ++bombtable[bottom2];
-                                gameboard[(row-1)-(bottom2)][pos+1]= 1;
+                                nonzerotable[pos+1].emplace_back(bottom2-1);
+                                ++bombtable[bottom2-1];
+                                gameboard[(row-1)-(bottom2-1)][pos+1]= 1;
                             }
                             break;
                         }
