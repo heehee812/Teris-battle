@@ -185,7 +185,6 @@ int main(int argc, char *argv[]){
         }
         //update gameboard, bombtable and nonzerotable
         table.update_table(block);
-        table.print_nonzerotable();
 
         //chek if isbomb
         int i= rowi;
@@ -275,6 +274,7 @@ Map Block:: create_hitset(){
                             default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
+                                isend= 1;
                             }
                         }
                         break;
@@ -319,6 +319,7 @@ Map Block:: create_hitset(){
                             default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
+                                isend= 1;
                             }
                         }
                         break;
@@ -363,6 +364,7 @@ Map Block:: create_hitset(){
                             default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
+                                isend= 1;
                             }
                         }
                         break;
@@ -399,6 +401,7 @@ Map Block:: create_hitset(){
                             default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
+                                isend= 1;
                             }
                         }
                         break;
@@ -441,6 +444,7 @@ Map Block:: create_hitset(){
                             default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
+                                isend= 1;
                             }
                         }
                         break;
@@ -470,6 +474,7 @@ Map Block:: create_hitset(){
                             default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
+                                isend= 1;
                             }
                         }
                         break;
@@ -502,6 +507,7 @@ Map Block:: create_hitset(){
                             default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
+                                isend= 1;
                             }
                         }
                         break;
@@ -544,6 +550,7 @@ Map Block:: create_hitset(){
                             default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
+                                isend= 1;
                             }
                         }
                         break;
@@ -587,6 +594,7 @@ Map Block:: create_hitset(){
                             default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
+                                isend= 1;
                             }
                         }
                         break;
@@ -624,6 +632,7 @@ Map Block:: create_hitset(){
                             default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
+                                isend= 1;
                             }
                         }
                         break;
@@ -665,6 +674,7 @@ Map Block:: create_hitset(){
                             default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
+                                isend= 1;
                             }
                         }
                         break;
@@ -693,6 +703,7 @@ Map Block:: create_hitset(){
                             default:{
                                 cout<<"[Input Invalid] ";
                                 game_over(1);
+                                isend= 1;
                             }
                         }
                         break;
