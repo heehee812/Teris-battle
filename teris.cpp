@@ -18,7 +18,7 @@ class GameBoard{
     public:
         vector<Col> gameboard;
         GameBoard(int n, int m): row(n), col(m){
-            cout<<"---------------Start------------------"<<endl;
+            // cout<<"---------------Start------------------"<<endl;
             new_gameboard(row, col);
         }
         GameBoard(){}
@@ -77,19 +77,15 @@ class Table{
                 bombtable.emplace_back(0);
             }
         }
-        int get_bottom(int pos1){
-            int end= nonzerotable[pos1].size()-1;
-            return nonzerotable[pos1][end]+1;
-        }
-        void update_table(Block block);
+        int get_bottom(int pos1, char *shape);
+        void update_table(Block block, int bottom1);
         void sort_table(int sortrow){
             sort(nonzerotable[sortrow].begin(), nonzerotable[sortrow].end());
         }
         //---------print---------
         void print_nonzerotable(){
             cout<<"nonzerotable: "<<endl;
-            for(int i= 0; i<col; i++)
-            {
+            for(int i= 0; i<col; i++){
                 for (auto j: nonzerotable[i])
                     cout << j << " ";
                 cout << '\n';
@@ -152,9 +148,6 @@ int main(int argc, char *argv[]){
     
     //load in a test case
     while(!ifile.eof()){
-        gb.print_gameboard();
-        table.print_nonzerotable();
-        table.print_bombtable();
         if(isend)
             break;
         //load in block   
@@ -170,9 +163,8 @@ int main(int argc, char *argv[]){
             game_over(1);
             break;
         }
-
         //check if hit
-        int bottom1= table.get_bottom(pos1i);
+        int bottom1= table.get_bottom(pos1i, shape);
         Block block(pos1i, pos2i, bottom1, shape);
         Map hitset= block.create_hitset();
         if(isend){
@@ -186,14 +178,12 @@ int main(int argc, char *argv[]){
             game_over(1);
             break;
         }
-
         //update gameboard, bombtable and nonzerotable
-        table.update_table(block);
+        table.update_table(block, bottom1);
         if(isend){
             game_over(1);
             break;
         }
-
         //chek if isbomb
         int i= rowi;
         int count= 0;//row that should be check
@@ -209,10 +199,7 @@ int main(int argc, char *argv[]){
                 count++;
             }
         }
-
-        // gb.print_gameboard();
     }
-    gb.print_gameboard();
     ifile.close();
     return 0;
 }
@@ -248,10 +235,10 @@ int string_to_int(const char *word){
 }
 
 void game_over(int i){
-    if(i)
-        cout<<"---------------GAME OVER------------------"<<endl;
-    else
-        cout<<"---------------End------------------"<<endl;
+    // if(i)
+    //     cout<<"---------------GAME OVER------------------"<<endl;
+    // else
+    //     cout<<"---------------End------------------"<<endl;
     isend= 1;
 }
 
@@ -266,18 +253,16 @@ Map Block:: create_hitset(){
                     case(73):{ //I
                         switch(dir){
                             case(1):{
-                                lpos= pos1;
                                 for(int i= 0; i<4; i++){
                                     for(int j= 1; j<= pos2; j++){
-                                        hitset.insert(Pair(lpos+j, bottom1+i));
+                                        hitset.insert(Pair(pos1+j, bottom1+i));
                                     }
                                 }
                                 break;
                             }
                             case(2):{
-                                lpos= pos1+3;
                                 for(int j= 1; j<= pos2; j++){
-                                    hitset.insert(Pair(lpos+j, bottom1));
+                                    hitset.insert(Pair(pos1+3+j, bottom1));
                                 }
                                 break;
                             }
@@ -290,26 +275,23 @@ Map Block:: create_hitset(){
                     }
                     case(74):{ //J
                         switch(dir){
-                            lpos= pos1+1;
                             case(1):{
                                 for(int i= 0; i<=3; i++)
                                     for(int j= 1; j<= pos2; j++){
-                                        hitset.insert(Pair(lpos+j, bottom1+i));
+                                        hitset.insert(Pair(pos1+1+j, bottom1+i));
                                     }
                                 break;
                             }
                             case(2):{
-                                lpos= pos1+2;
                                 for(int j= 1; j<= pos2; j++){
-                                    hitset.insert(Pair(lpos+j, bottom1));
+                                    hitset.insert(Pair(pos1+2+j, bottom1));
                                     hitset.insert(Pair(pos1+j, bottom1+1));
                                 }
                                 break;
                             }
                             case(3):{
-                                lpos= pos1+1;
                                 for(int j= 1; j<= pos2; j++){
-                                    hitset.insert(Pair(lpos+j, bottom1+2));
+                                    hitset.insert(Pair(pos1+1+j, bottom1+2));
                                 }
                                 for(int i= 0; i< 2; i++)
                                     for(int j= 1; j<= pos2; j++){
@@ -318,10 +300,9 @@ Map Block:: create_hitset(){
                                 break;
                             }
                             case(4):{
-                                lpos= pos1+2;
                                 for(int i= 0; i< 2; i++)
                                     for(int j= 1; j<= pos2; j++){
-                                        hitset.insert(Pair(lpos+j, bottom1+i));
+                                        hitset.insert(Pair(pos1+2+j, bottom1+i));
                                     }
                                 break;
                             }
@@ -335,9 +316,8 @@ Map Block:: create_hitset(){
                     case(76):{ //L
                         switch(dir){
                             case(1):{
-                                 lpos= pos1+1;
                                 for(int j= 1; j<= pos2; j++){
-                                    hitset.insert(Pair(lpos+j, bottom1));
+                                    hitset.insert(Pair(pos1+1+j, bottom1));
                                 }
                                 for(int i= 1; i<= 2; i++)
                                     for(int j= 1; j<= pos2; j++){
@@ -346,26 +326,23 @@ Map Block:: create_hitset(){
                                 break;
                             }
                             case(2):{
-                                lpos= pos1+2;
                                 for(int j= 1; j<= pos2; j++){
-                                    hitset.insert(Pair(lpos+j, bottom1+1));
+                                    hitset.insert(Pair(pos1+2+j, bottom1+1));
                                     hitset.insert(Pair(pos1+j, bottom1));
                                 }
                                 break;
                             }
                             case(3):{
-                                lpos= pos1+1;
                                 for(int i= 0; i<3; i++)
                                     for(int j= 1; j<=pos2; pos2++){
-                                        hitset.insert(Pair(lpos+j, bottom1+i));
+                                        hitset.insert(Pair(pos1+1+j, bottom1+i));
                                     }
                                 break;
                             }
                             case(4):{
-                                lpos= pos1+2;
                                 for(int i= 0; i<2; i++)
                                     for(int j= 1; j<=pos2; j++){
-                                        hitset.insert(Pair(lpos+j, bottom1+i));
+                                        hitset.insert(Pair(pos1+2+j, bottom1+i));
                                     } 
                                 break;
                             }
@@ -377,28 +354,25 @@ Map Block:: create_hitset(){
                         break;
                     } 
                     case(79):{ //O
-                        lpos= pos1+1;
                         for(int i= 0; i<2; i++)
                             for(int j= 1; j<= pos2; j++){
-                                hitset.insert(Pair(lpos+j, bottom1+i));
+                                hitset.insert(Pair(pos1+1+j, bottom1+i));
                             }
                         break;
                     }
                     case(83):{ //S
                         switch(dir){
                             case(1):{
-                                lpos= pos1+1;
                                 for(int j= 1; j<= pos2; j++){
-                                    hitset.insert(Pair(lpos+j, bottom1+1));
-                                    hitset.insert(Pair(pos1+j, bottom1));
+                                    hitset.insert(Pair(pos1+2+j, bottom1+1));
+                                    hitset.insert(Pair(pos1+1+j, bottom1));
                                 }
                                 break;
                             }
                             case(2):{
-                                lpos= pos1+ 1;
                                 for(int i= 0; i<2; i++)
                                     for(int j= 1; j<= pos2; j++){
-                                        hitset.insert(Pair(lpos+j, bottom1+i-1));
+                                        hitset.insert(Pair(pos1+1+j, bottom1+i-1));
                                     }
                                 for(int j=1; j<=pos2; j++){
                                     hitset.insert(Pair(pos1+j, bottom1+1));
@@ -415,33 +389,29 @@ Map Block:: create_hitset(){
                     case(84):{ //T
                         switch(dir){
                             case(1):{
-                                lpos= pos1+1;
                                 for(int j=1; j<= pos2; j++){
-                                    hitset.insert(Pair(lpos+j, bottom1+1));
-                                    hitset.insert(Pair(pos1+j, bottom1));
+                                    hitset.insert(Pair(pos1+1+j, bottom1-1));
+                                    hitset.insert(Pair(pos1+2+j, bottom1));
                                 }
                                 break;
                             }
                             case(2):{
-                                lpos= pos1+1;
                                 for(int i = 0; i<3; i++)
                                     for(int j= 1; j<=pos2; j++){
-                                        hitset.insert(Pair(lpos+j, bottom1+i));
+                                        hitset.insert(Pair(pos1+1+j, bottom1+i));
                                     }
                                 break;
                             }
                             case(3):{
-                                lpos= pos1+2;
                                 for(int j= 1; j<=pos2; j++){
-                                    hitset.insert(Pair(lpos+j, bottom1));
-                                    hitset.insert(Pair(pos1+j, bottom1+1));
+                                    hitset.insert(Pair(pos1+2+j, bottom1));
+                                    hitset.insert(Pair(pos1+1+j, bottom1+1));
                                 }
                                 break;
                             }
                             case(4):{
-                                lpos= pos1+1;
                                 for(int j= 1; j<= pos2; j++){
-                                    hitset.insert(Pair(lpos+j, bottom1+1));
+                                    hitset.insert(Pair(pos1+1+j, bottom1+1));
                                     hitset.insert(Pair(pos1+j, bottom1));
                                     hitset.insert(Pair(pos1+j, bottom1+2));
                                 }
@@ -459,17 +429,15 @@ Map Block:: create_hitset(){
                             case(1):{
                                 lpos= pos1+2;
                                 for(int j=1; j<=pos2; j++){
-                                    hitset.insert(Pair(lpos+j, bottom1-1));
-                                    hitset.insert(Pair(pos1+j, bottom1));
+                                    hitset.insert(Pair(pos1+2+j, bottom1-1));
+                                    hitset.insert(Pair(pos1+1+j, bottom1));
                                 }
                                 break;
                             }
                             case(2):{
-                                lpos= pos1+ 1;
-                                rpos= bottom1+1;
                                 for(int i= 0; i<2; i++)
                                     for(int j= 1; j<= pos2; j++){
-                                        hitset.insert(Pair(lpos+j, rpos+i));
+                                        hitset.insert(Pair(pos1+1+j, bottom1+1+i));
                                     }
                                 for(int j=1; j<=pos2; j++){
                                     hitset.insert(Pair(pos1+j, bottom1));
@@ -518,9 +486,9 @@ Map Block:: create_hitset(){
                                 for(int j= 1; j<=(-pos2); j++){
                                     hitset.insert(Pair(pos1-j, bottom1));
                                 }
-                                for(int i= 0; i<3; i++)
+                                for(int i= 0; i<2; i++)
                                     for(int j= 1; j<=(-pos2); j++){
-                                        hitset.insert(Pair(pos1-j, bottom1+i));
+                                        hitset.insert(Pair(pos1+1-j, bottom1+1+i));
                                     }
                                 break;
                             }
@@ -543,7 +511,7 @@ Map Block:: create_hitset(){
                                 lpos= pos1+2;
                                 for(int j= 1; j<=(-pos2); j++){
                                     hitset.insert(Pair(pos1-j, bottom1));
-                                    hitset.insert(Pair(lpos-j, bottom1-1));
+                                    hitset.insert(Pair(pos1+2-j, bottom1-1));
                                 }
                                 break;
                             }
@@ -572,21 +540,19 @@ Map Block:: create_hitset(){
                                 break;
                             }
                             case(3):{
-                                lpos= pos1+1;
                                 for(int j=1; j<=(-pos2); j++){
                                     hitset.insert(Pair(pos1-j, bottom1));
                                 }
                                 for(int i= 0; i<2; i++)
                                     for(int j= 1; j<=(-pos2); j++){
-                                        hitset.insert(Pair(lpos-j, bottom1-2+i));
+                                        hitset.insert(Pair(pos1+1-j, bottom1-2+i));
                                     }
                                 break;
                             }
                             case(4):{
-                                lpos= pos1+2;
                                 for(int j=1; j<=(-pos2); j++){
-                                    hitset.insert(Pair(pos1-j,bottom1+1));
-                                    hitset.insert(Pair(lpos-j, bottom1));
+                                    hitset.insert(Pair(pos1-j,bottom1));
+                                    hitset.insert(Pair(pos1+2-j, bottom1-1));
                                 }
                                 break;
                             }
@@ -608,18 +574,15 @@ Map Block:: create_hitset(){
                     case(83):{ //S
                         switch(dir){
                             case(1):{
-                                lpos= pos1+1;
                                 for(int j=1; j<=(-pos2); j++){
                                     hitset.insert(Pair(pos1-j, bottom1));
-                                    hitset.insert(Pair(lpos-j, bottom1+1));
+                                    hitset.insert(Pair(pos1+1-j, bottom1+1));
                                 }
                                 break;
                             }
                             case(2):{
-                                lpos= pos1+1;
-                                rpos= bottom1-1;
                                 for(int j=1; j<=(-pos2); j++){
-                                    hitset.insert(Pair(lpos-j, rpos));
+                                    hitset.insert(Pair(pos1+1-j, bottom1-1));
                                 }
                                 for(int i=0; i<2; i++)
                                     for(int j=1; j<=(-pos2); j++){
@@ -637,10 +600,9 @@ Map Block:: create_hitset(){
                     case(84):{ //T
                         switch(dir){
                             case(1):{
-                                lpos= pos1+1;
                                 for(int j= 1; j<=(-pos2); j++){
-                                    hitset.insert(Pair(lpos-j, bottom1));
-                                    hitset.insert(Pair(pos1-j, bottom1+1));
+                                    hitset.insert(Pair(pos1+1-j, bottom1-1));
+                                    hitset.insert(Pair(pos1-j, bottom1));
                                 }
                                 break;
                             }
@@ -648,15 +610,14 @@ Map Block:: create_hitset(){
                                 lpos= pos1+1;
                                 for(int j= 1; j<=(-pos2); j++){
                                     hitset.insert(Pair(pos1-j, bottom1));
-                                    hitset.insert(Pair(lpos-j, bottom1-1));
-                                    hitset.insert(Pair(lpos-j, bottom1+1));
+                                    hitset.insert(Pair(pos1+1-j, bottom1-1));
+                                    hitset.insert(Pair(pos1+1-j, bottom1+1));
                                 }
                                 break;
                             }
                             case(3):{
-                                lpos= pos1+1;
                                 for(int j= 1; j<=(-pos2); j++){
-                                    hitset.insert(Pair(lpos-j, bottom1+1));
+                                    hitset.insert(Pair(pos1+1-j, bottom1+1));
                                     hitset.insert(Pair(pos1-j, bottom1));
                                 }
                                 break;
@@ -678,9 +639,8 @@ Map Block:: create_hitset(){
                     case(90):{ //Z
                         switch(dir){
                             case(1):{
-                                lpos= pos1+1;
                                 for(int j= 1; j<=(-pos2); j++){
-                                    hitset.insert(Pair(lpos-j, bottom1-1));
+                                    hitset.insert(Pair(pos1+1-j, bottom1-1));
                                     hitset.insert(Pair(pos1-j, bottom1));
                                 }
                                 break;
@@ -688,7 +648,7 @@ Map Block:: create_hitset(){
                             case(2):{
                                 lpos= pos1+1;
                                 for(int j= 1; j<=(-pos2); j++){
-                                    hitset.insert(Pair(lpos-j, bottom1+2));
+                                    hitset.insert(Pair(pos1+1-j, bottom1+2));
                                 }
                                 for(int i= 0; i<2; i++)
                                     for(int j= 1; j<=(-pos2); j++){
@@ -711,10 +671,211 @@ Map Block:: create_hitset(){
             return hitset;   
         }
 
-void Table::update_table(Block block){
+int Table::get_bottom(int pos1,  char *kind){
+    int end= nonzerotable[pos1].size()-1;
+    int bottom= nonzerotable[pos1][end];
+    int dir= kind[1]-'0';
+    switch(kind[0]){
+        case(73):{ //I
+            switch(dir){
+                case(1):{
+                    break;
+                }
+                case(2):{
+                    int x;
+                    for(int i= 1; i<=3; i++){
+                        x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x] >bottom)
+                            bottom= nonzerotable[pos1][x];
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+        case(74):{ //J
+            switch(dir){
+                case(1):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
+                    break;
+                }
+                case(2):{
+                    int x;
+                    for(int i= 1; i<=2; i++){
+                        x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x] >bottom)
+                            bottom= nonzerotable[pos1][x];
+                    }
+                    break;
+                }
+                case(3):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]-2 >bottom)
+                        bottom= nonzerotable[pos1][x]-2;
+                    break;
+                }
+                case(4):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
+                    else{
+                        x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x]+1 >bottom)
+                            bottom= nonzerotable[pos1][x]+1;
+                    }
+                    break;
+                }
+            }
+            break;
+        }
+        case(76):{ //L
+            switch(dir){
+                case(1):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
+                break;
+                }
+                case(2):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    for(int i= 0; i<=1; i++)
+                        if(nonzerotable[pos1][x]-1 >bottom)
+                            bottom= nonzerotable[pos1][x]-1;
+                    break;
+                }
+                case(3):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]-2 >bottom)
+                        bottom= nonzerotable[pos1][x]-2;;
+                    break;
+                }
+                case(4):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    for(int i= 0; i<=2; i++)
+                        if(nonzerotable[pos1][x] >bottom)
+                            bottom= nonzerotable[pos1][x];
+                    break;
+                }
+            }
+            break;
+        }
+        case(79):{ //O
+            int x;
+            x= nonzerotable[++pos1].size()-1;
+            if(nonzerotable[pos1][x] >bottom)
+                bottom= nonzerotable[pos1][x];
+            break;
+        }
+        case(83):{ //S
+            switch(dir){
+                case(1):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
+                    else{
+                        x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x]-1 >bottom)
+                            bottom= nonzerotable[pos1][x]-1;
+                    }
+                    break;
+                }
+                case(2):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]+1 >bottom)
+                        bottom= nonzerotable[pos1][x]+1;
+                    break;
+                }
+            }
+            break;
+        }
+        case(84):{ //T
+            switch(dir){
+                case(1):{
+                    int x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]+1 >bottom){
+                        bottom= nonzerotable[pos1][x]+1;
+                        }
+                    else{
+                        x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
+                    }
+                break;
+                }
+                case(2):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]+1 >bottom)
+                        bottom= nonzerotable[pos1][x]+1;
+                    break;
+                }
+                case(3):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]-1 >bottom)
+                        bottom= nonzerotable[pos1][x]-1;
+                    else{
+                         x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
+                    }
+                    break;
+                }
+                case(4):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]-1 >bottom)
+                        bottom= nonzerotable[pos1][x]-1;
+                    break;
+                }
+            }
+            break;
+        }
+        case(90):{ //Z
+            switch(dir){
+                case(1):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]+1 >bottom)
+                        bottom= nonzerotable[pos1][x]+1;
+                    else{
+                        x= nonzerotable[++pos1].size()-1;
+                        if(nonzerotable[pos1][x]+1 >bottom)
+                        bottom= nonzerotable[pos1][x]+1;
+                    }
+                break;
+                }
+                case(2):{
+                    int x;
+                    x= nonzerotable[++pos1].size()-1;
+                    if(nonzerotable[pos1][x]-1 >bottom)
+                        bottom= nonzerotable[pos1][x]-1;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    return bottom+1;
+}
+
+void Table::update_table(Block block, int bottom1){
             int pos= block.get_pos();
-            int bottom2= get_bottom(pos);
             char *kind= block.get_kind();
+            int bottom2= get_bottom(pos, kind);
+            if(bottom1<get_bottom(pos, kind))
+                bottom2= bottom1;
             int dir= kind[1]-'0';
             switch(kind[0]){
                 case(73):{ //I
@@ -878,13 +1039,13 @@ void Table::update_table(Block block){
                             }
                             else{
                                 for(int j= 0; j<3; j++){
-                                    nonzerotable[pos+j].emplace_back(bottom2+1);
-                                    ++bombtable[bottom2+1];
-                                    gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                                    nonzerotable[pos+j].emplace_back(bottom2);
+                                    ++bombtable[bottom2];
+                                    gameboard[(row-1)-(bottom2)][pos+j]= 1;
                                 }
-                                nonzerotable[pos+2].emplace_back(bottom2);
-                                ++bombtable[bottom2];
-                                gameboard[(row-1)-(bottom2)][pos+2]= 1;
+                                nonzerotable[pos+2].emplace_back(bottom2-1);
+                                ++bombtable[bottom2-1];
+                                gameboard[(row-1)-(bottom2-1)][pos+2]= 1;
                             }
                             break;
                         }
@@ -895,7 +1056,7 @@ void Table::update_table(Block block){
                 } 
                 case(79):{ //O
                     if(bottom2+ 1== row-1){
-                                isend= 1;
+                        isend= 1;
                     }
                     else{
                         for(int i= 0; i<2; i++)
@@ -954,13 +1115,13 @@ void Table::update_table(Block block){
                             }
                             else{
                                 for(int j= 0; j<3; j++){
-                                    nonzerotable[pos+j].emplace_back(bottom2+1);
-                                    ++bombtable[bottom2+1];
-                                    gameboard[(row-1)-(bottom2+1)][pos+j]= 1;
+                                    nonzerotable[pos+j].emplace_back(bottom2);
+                                    ++bombtable[bottom2];
+                                    gameboard[(row-1)-(bottom2)][pos+j]= 1;
                                     }
-                                nonzerotable[pos+1].emplace_back(bottom2);
-                                ++bombtable[bottom2];
-                                gameboard[(row-1)-(bottom2)][pos+1]= 1;
+                                nonzerotable[pos+1].emplace_back(bottom2-1);
+                                ++bombtable[bottom2-1];
+                                gameboard[(row-1)-(bottom2-1)][pos+1]= 1;
                             }
                             break;
                         }
