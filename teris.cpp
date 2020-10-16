@@ -26,27 +26,27 @@ class GameBoard{
             gameboard.resize(row, vector<int>(col, 0));
         }
 
-        void print_gameboard(string filepath){
+        void print_gameboard(){
         // string filepath= "c:\\"+filename+"_output.txt";
-            ofstream ofile(filepath, ios::out);
-            if(ofile.is_open()){
-                ofile<<"gameboard: "<<endl;
+            // ofstream ofile(filepath, ios::out);
+            // if(ofile.is_open()){
+            //     ofile<<"gameboard: "<<endl;
                 for(int i=0; i<row; i++){
                     for(int j= 0; j<col; j++){
-                        ofile<<gameboard[i][j];
+                        cout<<gameboard[i][j];
                     }
-                    ofile<<endl;
+                    cout<<endl;
                 }
-                ofile<<endl;
-                }
+                cout<<endl;
+                // }
         }
         void bomb_gameboard(int i){
                 vector<Col> tmp= gameboard;
                 tmp.erase(tmp.begin()+row-1-i);
-                gameboard= tmp;
                 vector<int> v;
                 v.resize(col, 0);
-                gameboard.insert(gameboard.begin(),v); 
+                tmp.insert(tmp.begin(),v); 
+                gameboard= tmp;
         }
 };
 
@@ -120,11 +120,26 @@ class Table{
         }
         //---------deal with the check---------
         void bomb_nonzerotable(int i){
+                print_nonzerotable();
+                cout<<"llll"<<endl;
                 for(int c= 0; c<col; c++){
-                    nonzerotable[c].erase(nonzerotable[c].begin()+i+1);
-                    for(int r= i+1; r<nonzerotable[c].size(); r++){
-                        --nonzerotable[c][r];
-                    }
+                    for(auto u: nonzerotable[c])
+                        cout<<u<<" ";
+                    cout<<endl;
+                    int index;
+                    for(int j= 0; j< nonzerotable[c].size(); j++)
+                        if(nonzerotable[c][j]==i){
+                            index= j;
+                            break;
+                        }
+                    for(int j= index+1; j<nonzerotable[c].size(); j++)
+                        nonzerotable[c][j]--;
+                    nonzerotable[c].erase(nonzerotable[c].begin()+ index);
+                    // nonzerotable[c].erase(nonzerotable[c].begin()+i+1);
+                    print_nonzerotable();
+                    // for(int r= i+1; r<nonzerotable[c].size(); r++){
+                    //     --nonzerotable[c][r];
+                    // }
                 }
         }
         void bomb_bombtable(int i){
@@ -162,6 +177,8 @@ int main(int argc, char *argv[]){
         }
         int pos1i= string_to_int(pos1)-1;
         int pos2i= string_to_int(pos2);
+        gb.print_gameboard();
+        cout<<"shape"<<shape<<endl;
         //check if input invalid
         if((pos1i+pos2i)>coli-1||(pos1i+pos2i)<0){
             game_over(1);
@@ -191,6 +208,10 @@ int main(int argc, char *argv[]){
         //chek if isbomb
         int i= rowi;
         int count= 0;//row that should be check
+        cout<<"=============**"<<endl;
+        table.print_nonzerotable();
+        gb.print_gameboard();
+        table.print_bombtable();
         while(i--){
             isbomb= table.check_isbomb(count);
             if(isbomb){
@@ -204,8 +225,7 @@ int main(int argc, char *argv[]){
             }
         }
     }
-    string filepath="/Users/exosite/Desktop/enyu/data/teris/Teris-battle/test.txt";
-    gb.print_gameboard(filepath);
+    // string filepath="/test.txt";
     ifile.close();
     return 0;
 }
