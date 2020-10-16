@@ -120,12 +120,7 @@ class Table{
         }
         //---------deal with the check---------
         void bomb_nonzerotable(int i){
-                print_nonzerotable();
-                cout<<"llll"<<endl;
                 for(int c= 0; c<col; c++){
-                    for(auto u: nonzerotable[c])
-                        cout<<u<<" ";
-                    cout<<endl;
                     int index;
                     for(int j= 0; j< nonzerotable[c].size(); j++)
                         if(nonzerotable[c][j]==i){
@@ -135,11 +130,6 @@ class Table{
                     for(int j= index+1; j<nonzerotable[c].size(); j++)
                         nonzerotable[c][j]--;
                     nonzerotable[c].erase(nonzerotable[c].begin()+ index);
-                    // nonzerotable[c].erase(nonzerotable[c].begin()+i+1);
-                    print_nonzerotable();
-                    // for(int r= i+1; r<nonzerotable[c].size(); r++){
-                    //     --nonzerotable[c][r];
-                    // }
                 }
         }
         void bomb_bombtable(int i){
@@ -177,8 +167,6 @@ int main(int argc, char *argv[]){
         }
         int pos1i= string_to_int(pos1)-1;
         int pos2i= string_to_int(pos2);
-        gb.print_gameboard();
-        cout<<"shape"<<shape<<endl;
         //check if input invalid
         if((pos1i+pos2i)>coli-1||(pos1i+pos2i)<0){
             game_over(1);
@@ -208,10 +196,6 @@ int main(int argc, char *argv[]){
         //chek if isbomb
         int i= rowi;
         int count= 0;//row that should be check
-        cout<<"=============**"<<endl;
-        table.print_nonzerotable();
-        gb.print_gameboard();
-        table.print_bombtable();
         while(i--){
             isbomb= table.check_isbomb(count);
             if(isbomb){
