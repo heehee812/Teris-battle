@@ -25,7 +25,6 @@ class GameBoard{
         void new_gameboard(int n, int m){
             gameboard.resize(row, vector<int>(col, 0));
         }
-
         void print_gameboard(string filepath){
         // string filepath= "c:\\"+filename+"_output.txt";
             ofstream ofile(filepath, ios::out);
@@ -43,10 +42,10 @@ class GameBoard{
         void bomb_gameboard(int i){
                 vector<Col> tmp= gameboard;
                 tmp.erase(tmp.begin()+row-1-i);
-                gameboard= tmp;
                 vector<int> v;
                 v.resize(col, 0);
-                gameboard.insert(gameboard.begin(),v); 
+                tmp.insert(tmp.begin(),v); 
+                gameboard= tmp;
         }
 };
 
@@ -121,10 +120,15 @@ class Table{
         //---------deal with the check---------
         void bomb_nonzerotable(int i){
                 for(int c= 0; c<col; c++){
-                    nonzerotable[c].erase(nonzerotable[c].begin()+i+1);
-                    for(int r= i+1; r<nonzerotable[c].size(); r++){
-                        --nonzerotable[c][r];
-                    }
+                    int index;
+                    for(int j= 0; j< nonzerotable[c].size(); j++)
+                        if(nonzerotable[c][j]==i){
+                            index= j;
+                            break;
+                        }
+                    for(int j= index+1; j<nonzerotable[c].size(); j++)
+                        nonzerotable[c][j]--;
+                    nonzerotable[c].erase(nonzerotable[c].begin()+ index);
                 }
         }
         void bomb_bombtable(int i){
