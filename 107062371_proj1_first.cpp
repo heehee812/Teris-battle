@@ -1193,7 +1193,4 @@ void Table::update_table(Block block, int bottom1){
             for(int i= 0; i<col; i++){
                 sort_table(i);
             }
-            for(int i= 0; i<col; i++){
-                sort_table(i);
-            }
         }
