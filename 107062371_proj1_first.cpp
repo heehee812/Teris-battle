@@ -25,20 +25,31 @@ class GameBoard{
         void new_gameboard(int n, int m){
             gameboard.resize(row, vector<int>(col, 0));
         }
-        void print_gameboard(string filepath){
-        // string filepath= "c:\\"+filename+"_output.txt";
-            ofstream ofile(filepath, ios::out);
-            if(ofile.is_open()){
-                ofile<<"gameboard: "<<endl;
+        // void print_gameboard(string filepath){
+        //     ofstream ofile(filepath, ios::out);
+        //     if(ofile.is_open()){
+        //         ofile<<"gameboard: "<<endl;
+        //         for(int i=0; i<row; i++){
+        //             for(int j= 0; j<col; j++){
+        //                 ofile<<gameboard[i][j];
+        //             }
+        //             ofile<<endl;
+        //         }
+        //         ofile<<endl;
+        //         }
+        // }
+
+        void print_gameboard(){
+                cout<<"gameboard: "<<endl;
                 for(int i=0; i<row; i++){
                     for(int j= 0; j<col; j++){
-                        ofile<<gameboard[i][j];
+                        cout<<gameboard[i][j];
                     }
-                    ofile<<endl;
+                    cout<<endl;
                 }
-                ofile<<endl;
-                }
+                cout<<endl;
         }
+
         void bomb_gameboard(int i){
                 vector<Col> tmp= gameboard;
                 tmp.erase(tmp.begin()+row-1-i);
@@ -72,10 +83,7 @@ class Table{
         vector<int> bombtable;
     public:
         Table(int n, int m, vector<Col> &gb): row(n), col(m), gameboard(gb){
-            nonzerotable.reserve(col);
-            for(int i= 0; i<col; i++){
-                nonzerotable[i].emplace_back(-1);
-            }
+            nonzerotable.resize(col, vector<int>(1, -1));
             for(int i= 0; i<row; i++){
                 bombtable.emplace_back(0);
             }
@@ -209,7 +217,7 @@ int main(int argc, char *argv[]){
         }
     }
     string filepath="./107062371_proj1.data";
-    gb.print_gameboard(filepath);
+    gb.print_gameboard();
     ifile.close();
     return 0;
 }
@@ -245,10 +253,10 @@ int string_to_int(const char *word){
 }
 
 void game_over(int i){
-    // if(i)
-    //     cout<<"---------------GAME OVER------------------"<<endl;
-    // else
-    //     cout<<"---------------End------------------"<<endl;
+    if(i)
+        cout<<"---------------GAME OVER------------------"<<endl;
+    else
+        cout<<"---------------End------------------"<<endl;
     isend= 1;
 }
 
@@ -891,7 +899,7 @@ void Table::update_table(Block block, int bottom1){
                 case(73):{ //I
                     switch(dir){
                         case(1):{
-                            if(bottom2+ 3== row-1){
+                            if(bottom2+ 3> row-1){
                                 isend= 1;
                             }
                             else{
@@ -904,7 +912,7 @@ void Table::update_table(Block block, int bottom1){
                             break;
                         }
                         case(2):{
-                            if(bottom2== row-1){
+                            if(bottom2> row-1){
                                 isend= 1;
                             }
                             else{
@@ -925,7 +933,7 @@ void Table::update_table(Block block, int bottom1){
                 case(74):{ //J
                     switch(dir){
                         case(1):{
-                            if(bottom2+ 2== row-1){
+                            if(bottom2+ 2> row-1){
                                 isend= 1;
                             }
                             else{
@@ -941,7 +949,7 @@ void Table::update_table(Block block, int bottom1){
                             break;
                         }
                         case(2):{
-                            if(bottom2+ 1== row-1){
+                            if(bottom2+ 1> row-1){
                                 isend= 1;
                             }
                             else{
@@ -957,7 +965,7 @@ void Table::update_table(Block block, int bottom1){
                             break;
                         }
                         case(3):{
-                            if(bottom2+ 2== row-1){
+                            if(bottom2+ 2> row-1){
                                 isend= 1;
                             }
                             else{
@@ -973,7 +981,7 @@ void Table::update_table(Block block, int bottom1){
                             break;
                         }
                         case(4):{
-                            if(bottom2== row-1){
+                            if(bottom2> row-1){
                                 isend= 1;
                             }
                             else{
@@ -996,7 +1004,7 @@ void Table::update_table(Block block, int bottom1){
                 case(76):{ //L
                     switch(dir){
                         case(1):{
-                            if(bottom2+ 2== row-1){
+                            if(bottom2+ 2> row-1){
                                 isend= 1;
                             }
                             else{
@@ -1012,7 +1020,7 @@ void Table::update_table(Block block, int bottom1){
                             break;
                         }
                         case(2):{
-                            if(bottom2+ 1== row-1){
+                            if(bottom2+ 1> row-1){
                                 isend= 1;
                             }
                             else{
@@ -1028,7 +1036,7 @@ void Table::update_table(Block block, int bottom1){
                             break;
                         }
                         case(3):{
-                            if(bottom2== row-1){
+                            if(bottom2> row-1){
                                 isend= 1;
                             }
                             else{
@@ -1044,7 +1052,7 @@ void Table::update_table(Block block, int bottom1){
                             break;
                         }
                         case(4):{
-                            if(bottom2+ 1== row-1){
+                            if(bottom2+ 1> row-1){
                                 isend= 1;
                             }
                             else{
@@ -1065,7 +1073,7 @@ void Table::update_table(Block block, int bottom1){
                     break;
                 } 
                 case(79):{ //O
-                    if(bottom2+ 1== row-1){
+                    if(bottom2+ 1> row-1){
                         isend= 1;
                     }
                     else{
@@ -1081,7 +1089,7 @@ void Table::update_table(Block block, int bottom1){
                 case(83):{ //S
                     switch(dir){
                         case(1):{
-                            if(bottom2+ 1== row-1){
+                            if(bottom2+ 1> row-1){
                                 isend= 1;
                             }
                             else{
@@ -1097,7 +1105,7 @@ void Table::update_table(Block block, int bottom1){
                             break;
                         }
                         case(2):{
-                            if(bottom2+ 1== row-1){
+                            if(bottom2+ 1> row-1){
                             isend= 1;
                             }
                             else{
@@ -1120,7 +1128,7 @@ void Table::update_table(Block block, int bottom1){
                 case(84):{ //T
                     switch(dir){
                         case(1):{
-                            if(bottom2+ 1== row-1){
+                            if(bottom2+ 1> row-1){
                                 isend= 1;
                             }
                             else{
@@ -1136,7 +1144,7 @@ void Table::update_table(Block block, int bottom1){
                             break;
                         }
                         case(2):{
-                            if(bottom2+ 1== row-1){
+                            if(bottom2+ 1> row-1){
                                 isend= 1;
                             }
                             else{
@@ -1152,7 +1160,7 @@ void Table::update_table(Block block, int bottom1){
                             break;
                         }
                         case(3):{
-                            if(bottom2+ 1== row-1){
+                            if(bottom2+ 1> row-1){
                                 isend= 1;
                             }
                             else{
@@ -1168,7 +1176,7 @@ void Table::update_table(Block block, int bottom1){
                             break;
                         }
                         case(4):{
-                            if(bottom2+ 2== row-1){
+                            if(bottom2+ 2> row-1){
                                 isend= 1;
                             }
                             else{
@@ -1191,7 +1199,7 @@ void Table::update_table(Block block, int bottom1){
                 case(90):{ //Z
                     switch(dir){
                         case(1):{
-                            if(bottom2== row-1){
+                            if(bottom2> row-1){
                                 isend= 1;
                             }
                             else{
@@ -1207,7 +1215,7 @@ void Table::update_table(Block block, int bottom1){
                             break;
                         }
                         case(2):{
-                            if(bottom2+ 1== row-1){
+                            if(bottom2+ 1> row-1){
                                 isend= 1;
                             }
                             else{
