@@ -208,7 +208,7 @@ int main(int argc, char *argv[]){
             }
         }
     }
-    string filepath="./test.txt";
+    string filepath="/107062371_proj1.txt";
     gb.print_gameboard(filepath);
     ifile.close();
     return 0;
@@ -344,7 +344,7 @@ Map Block:: create_hitset(){
                             }
                             case(3):{
                                 for(int i= 0; i<3; i++)
-                                    for(int j= 1; j<=pos2; pos2++){
+                                    for(int j= 1; j<=pos2; j++){
                                         hitset.insert(Pair(pos1+1+j, bottom1+i));
                                     }
                                 break;
@@ -763,8 +763,8 @@ int Table::get_bottom(int pos1,  char *kind){
                 case(3):{
                     int x;
                     x= nonzerotable[++pos1].size()-1;
-                    if(nonzerotable[pos1][x]-2 >bottom)
-                        bottom= nonzerotable[pos1][x]-2;;
+                    if(nonzerotable[pos1][x]+2 >bottom)
+                        bottom= nonzerotable[pos1][x]+2;
                     break;
                 }
                 case(4):{
@@ -833,8 +833,8 @@ int Table::get_bottom(int pos1,  char *kind){
                 case(3):{
                     int x;
                     x= nonzerotable[++pos1].size()-1;
-                    if(nonzerotable[pos1][x]-1 >bottom)
-                        bottom= nonzerotable[pos1][x]-1;
+                    if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
                     else{
                          x= nonzerotable[++pos1].size()-1;
                         if(nonzerotable[pos1][x] >bottom)
@@ -1053,9 +1053,9 @@ void Table::update_table(Block block, int bottom1){
                                     ++bombtable[bottom2];
                                     gameboard[(row-1)-(bottom2)][pos+j]= 1;
                                 }
-                                nonzerotable[pos+2].emplace_back(bottom2-1);
-                                ++bombtable[bottom2-1];
-                                gameboard[(row-1)-(bottom2-1)][pos+2]= 1;
+                                nonzerotable[pos+2].emplace_back(bottom2+1);
+                                ++bombtable[bottom2+1];
+                                gameboard[(row-1)-(bottom2+1)][pos+2]= 1;
                             }
                             break;
                         }
