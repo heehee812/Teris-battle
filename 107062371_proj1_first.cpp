@@ -145,11 +145,7 @@ int main(int argc, char *argv[]){
     fstream ifile(filename, ios::in);
 
     //get the size of the game board
-    // ifile.getline(row, sizeof(row), ' ');
-    // ifile.getline(col, sizeof(col), '\n');
     ifile>>row>>col;
-    // int rowi= string_to_int(row);
-    // int coli= string_to_int(col);
     GameBoard gb(row, col);
     Table table(row, col, gb.gameboard);
     //load in a test case
@@ -157,15 +153,12 @@ int main(int argc, char *argv[]){
         if(isend)
             break;
         //load in block   
-        // read_file(shape, pos1, pos2, &ifile);
         ifile>>shape>>pos1>>pos2;
         pos1= pos1-1;
         if(shape[0]==69){
             game_over(0);
             break;
         }
-        // int pos1i= string_to_int(pos1)-1;
-        // int pos2i= string_to_int(pos2);
         //check if input invalid
         if((pos1+pos2)>col-1||(pos1+pos2)<0){
             game_over(1);
@@ -222,28 +215,6 @@ void read_file(char *shape, char *pos1, char *pos2, fstream *ifile){
     (*ifile).getline(pos2, sizeof(pos2), '\n');
 }
 
-int string_to_int(const char *word){
-    int number= 0;
-    int isminor= 0;
-    while(*word){
-        if((*word)<=47&&(*word)!=45);
-        else{
-            if(*word==45){
-                isminor= 1;
-            }
-            else{
-                number= (number*10)+ (*word-'0');
-                if(isminor){
-                    number= number*(-1);
-                    isminor= 0;
-                }
-            }
-        }
-        word++;
-    }
-    return number;
-}
-
 void game_over(int i){
     // if(i)
     //     cout<<"---------------GAME OVER------------------"<<endl;
@@ -255,7 +226,6 @@ void game_over(int i){
 /*------------member function--------------*/
 Map Block:: create_hitset(){
             int dir= kind[1]-'0';
-            int lpos, rpos; //the lftest and the rightest point of the block
             Map hitset;
             if(pos2== 0);
             else if(pos2>0){
@@ -437,7 +407,6 @@ Map Block:: create_hitset(){
                     case(90):{ //Z
                         switch(dir){
                             case(1):{
-                                lpos= pos1+2;
                                 for(int j=1; j<=pos2; j++){
                                     hitset.insert(Pair(pos1+2+j, bottom1-1));
                                     hitset.insert(Pair(pos1+1+j, bottom1));
@@ -518,7 +487,6 @@ Map Block:: create_hitset(){
                                 break;
                             }
                             case(4):{
-                                lpos= pos1+2;
                                 for(int j= 1; j<=(-pos2); j++){
                                     hitset.insert(Pair(pos1-j, bottom1));
                                     hitset.insert(Pair(pos1+2-j, bottom1-1));
@@ -617,7 +585,6 @@ Map Block:: create_hitset(){
                                 break;
                             }
                             case(2):{
-                                lpos= pos1+1;
                                 for(int j= 1; j<=(-pos2); j++){
                                     hitset.insert(Pair(pos1-j, bottom1));
                                     hitset.insert(Pair(pos1+1-j, bottom1-1));
@@ -656,7 +623,6 @@ Map Block:: create_hitset(){
                                 break;
                             }
                             case(2):{
-                                lpos= pos1+1;
                                 for(int j= 1; j<=(-pos2); j++){
                                     hitset.insert(Pair(pos1+1-j, bottom1+2));
                                 }
