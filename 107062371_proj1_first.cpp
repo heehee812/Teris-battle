@@ -241,10 +241,10 @@ int string_to_int(const char *word){
 }
 
 void game_over(int i){
-    if(i)
-        cout<<"---------------GAME OVER------------------"<<endl;
-    else
-        cout<<"---------------End------------------"<<endl;
+    // if(i)
+    //     cout<<"---------------GAME OVER------------------"<<endl;
+    // else
+    //     cout<<"---------------End------------------"<<endl;
     isend= 1;
 }
 
