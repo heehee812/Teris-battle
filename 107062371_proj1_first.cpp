@@ -18,7 +18,6 @@ class GameBoard{
     public:
         vector<Col> gameboard;
         GameBoard(int n, int m): row(n), col(m){
-            // cout<<"---------------Start------------------"<<endl;
             new_gameboard(row, col);
         }
         GameBoard(){}
@@ -152,6 +151,7 @@ int main(int argc, char *argv[]){
     while(!ifile.eof()){
         if(isend)
             break;
+      
         //load in block   
         ifile>>shape>>pos1>>pos2;
         pos1= pos1-1;
@@ -159,11 +159,13 @@ int main(int argc, char *argv[]){
             game_over(0);
             break;
         }
+
         //check if input invalid
         if((pos1+pos2)>col-1||(pos1+pos2)<0){
             game_over(1);
             break;
         }
+      
         //check if hit
         int bottom1= table.get_bottom(pos1, shape);
         Block block(pos1, pos2, bottom1, shape);
@@ -179,12 +181,14 @@ int main(int argc, char *argv[]){
             game_over(1);
             break;
         }
+      
         //update gameboard, bombtable and nonzerotable
         table.update_table(block, bottom1);
         if(isend){
             game_over(1);
             break;
         }
+      
         //chek if isbomb
         int i= row;
         int count= 0;//row that should be check
@@ -209,17 +213,7 @@ int main(int argc, char *argv[]){
 
 
 /*------------shared function--------------*/
-void read_file(char *shape, char *pos1, char *pos2, fstream *ifile){
-    (*ifile).getline(shape, sizeof(shape), ' ');
-    (*ifile).getline(pos1, sizeof(pos1), ' ');
-    (*ifile).getline(pos2, sizeof(pos2), '\n');
-}
-
 void game_over(int i){
-    // if(i)
-    //     cout<<"---------------GAME OVER------------------"<<endl;
-    // else
-    //     cout<<"---------------End------------------"<<endl;
     isend= 1;
 }
 
