@@ -25,31 +25,19 @@ class GameBoard{
         void new_gameboard(int n, int m){
             gameboard.resize(row, vector<int>(col, 0));
         }
-        // void print_gameboard(string filepath){
-        //     ofstream ofile(filepath, ios::out);
-        //     if(ofile.is_open()){
-        //         ofile<<"gameboard: "<<endl;
-        //         for(int i=0; i<row; i++){
-        //             for(int j= 0; j<col; j++){
-        //                 ofile<<gameboard[i][j];
-        //             }
-        //             ofile<<endl;
-        //         }
-        //         ofile<<endl;
-        //         }
-        // }
-
-        void print_gameboard(){
-                cout<<"gameboard: "<<endl;
+        void print_gameboard(string filepath){
+            ofstream ofile(filepath, ios::out);
+            if(ofile.is_open()){
+                ofile<<"gameboard: "<<endl;
                 for(int i=0; i<row; i++){
                     for(int j= 0; j<col; j++){
-                        cout<<gameboard[i][j];
+                        ofile<<gameboard[i][j];
                     }
-                    cout<<endl;
+                    ofile<<endl;
                 }
-                cout<<endl;
+                ofile<<endl;
+                }
         }
-
         void bomb_gameboard(int i){
                 vector<Col> tmp= gameboard;
                 tmp.erase(tmp.begin()+row-1-i);
@@ -217,7 +205,7 @@ int main(int argc, char *argv[]){
         }
     }
     string filepath="./107062371_proj1.data";
-    gb.print_gameboard();
+    gb.print_gameboard(filepath);
     ifile.close();
     return 0;
 }
