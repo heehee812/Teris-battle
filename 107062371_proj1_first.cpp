@@ -135,7 +135,9 @@ class Table{
 
 /*---------------main function-----------------*/
 int main(int argc, char *argv[]){
-    char row[3], col[5], shape[4], pos1[4], pos2[5];
+    // char row[3], col[5], shape[4], pos1[4], pos2[5];
+    char shape[4];
+    int row, col, pos1, pos2;
     int isbomb= 0;
 
     //load in a test case
@@ -143,33 +145,35 @@ int main(int argc, char *argv[]){
     fstream ifile(filename, ios::in);
 
     //get the size of the game board
-    ifile.getline(row, sizeof(row), ' ');
-    ifile.getline(col, sizeof(col), '\n');
-    int rowi= string_to_int(row);
-    int coli= string_to_int(col);
-    GameBoard gb(rowi, coli);
-    Table table(rowi, coli, gb.gameboard);
-    
+    // ifile.getline(row, sizeof(row), ' ');
+    // ifile.getline(col, sizeof(col), '\n');
+    ifile>>row>>col;
+    // int rowi= string_to_int(row);
+    // int coli= string_to_int(col);
+    GameBoard gb(row, col);
+    Table table(row, col, gb.gameboard);
     //load in a test case
     while(!ifile.eof()){
         if(isend)
             break;
         //load in block   
-        read_file(shape, pos1, pos2, &ifile);
+        // read_file(shape, pos1, pos2, &ifile);
+        ifile>>shape>>pos1>>pos2;
+        pos1= pos1-1;
         if(shape[0]==69){
             game_over(0);
             break;
         }
-        int pos1i= string_to_int(pos1)-1;
-        int pos2i= string_to_int(pos2);
+        // int pos1i= string_to_int(pos1)-1;
+        // int pos2i= string_to_int(pos2);
         //check if input invalid
-        if((pos1i+pos2i)>coli-1||(pos1i+pos2i)<0){
+        if((pos1+pos2)>col-1||(pos1+pos2)<0){
             game_over(1);
             break;
         }
         //check if hit
-        int bottom1= table.get_bottom(pos1i, shape);
-        Block block(pos1i, pos2i, bottom1, shape);
+        int bottom1= table.get_bottom(pos1, shape);
+        Block block(pos1, pos2, bottom1, shape);
         Map hitset= block.create_hitset();
         if(isend){
             game_over(1);
@@ -189,7 +193,7 @@ int main(int argc, char *argv[]){
             break;
         }
         //chek if isbomb
-        int i= rowi;
+        int i= row;
         int count= 0;//row that should be check
         while(i--){
             isbomb= table.check_isbomb(count);
