@@ -208,7 +208,7 @@ int main(int argc, char *argv[]){
             }
         }
     }
-    string filepath="/107062371_proj1.txt";
+    string filepath="./107062371_proj1.data";
     gb.print_gameboard(filepath);
     ifile.close();
     return 0;
