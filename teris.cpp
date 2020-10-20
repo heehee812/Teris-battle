@@ -25,19 +25,19 @@ class GameBoard{
         void new_gameboard(int n, int m){
             gameboard.resize(row, vector<int>(col, 0));
         }
-        void print_gameboard(){
-        // string filepath= "c:\\"+filename+"_output.txt";
-            // ofstream ofile(filepath, ios::out);
-            // if(ofile.is_open()){
-                cout<<"gameboard: "<<endl;
+        void print_gameboard(string filepath){
+        string filepath= "c:\\"+filename+"_output.txt";
+            ofstream ofile(filepath, ios::out);
+            if(ofile.is_open()){
+                ofile<<"gameboard: "<<endl;
                 for(int i=0; i<row; i++){
                     for(int j= 0; j<col; j++){
-                        cout<<gameboard[i][j];
+                        ofile<<gameboard[i][j];
                     }
-                    cout<<endl;
+                    ofile<<endl;
                 }
-                cout<<endl;
-            // }
+                ofile<<endl;
+            }
         }
         void bomb_gameboard(int i){
                 vector<Col> tmp= gameboard;
@@ -160,7 +160,6 @@ int main(int argc, char *argv[]){
             break;
         //load in block   
         read_file(shape, pos1, pos2, &ifile);
-        cout<<"shape: "<<shape<<endl;
         if(shape[0]==69){
             game_over(0);
             break;

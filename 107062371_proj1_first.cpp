@@ -18,26 +18,26 @@ class GameBoard{
     public:
         vector<Col> gameboard;
         GameBoard(int n, int m): row(n), col(m){
-            cout<<"---------------Start------------------"<<endl;
+            // cout<<"---------------Start------------------"<<endl;
             new_gameboard(row, col);
         }
         GameBoard(){}
         void new_gameboard(int n, int m){
             gameboard.resize(row, vector<int>(col, 0));
         }
-        void print_gameboard(){
+        void print_gameboard(string filepath){
         // string filepath= "c:\\"+filename+"_output.txt";
-            // ofstream ofile(filepath, ios::out);
-            // if(ofile.is_open()){
-                cout<<"gameboard: "<<endl;
+            ofstream ofile(filepath, ios::out);
+            if(ofile.is_open()){
+                ofile<<"gameboard: "<<endl;
                 for(int i=0; i<row; i++){
                     for(int j= 0; j<col; j++){
-                        cout<<gameboard[i][j];
+                        ofile<<gameboard[i][j];
                     }
-                    cout<<endl;
+                    ofile<<endl;
                 }
-                cout<<endl;
-            // }
+                ofile<<endl;
+                }
         }
         void bomb_gameboard(int i){
                 vector<Col> tmp= gameboard;
@@ -151,7 +151,6 @@ int main(int argc, char *argv[]){
     ifile.getline(col, sizeof(col), '\n');
     int rowi= string_to_int(row);
     int coli= string_to_int(col);
-    cout<<rowi<<coli<<endl;
     GameBoard gb(rowi, coli);
     Table table(rowi, coli, gb.gameboard);
     
@@ -161,7 +160,6 @@ int main(int argc, char *argv[]){
             break;
         //load in block   
         read_file(shape, pos1, pos2, &ifile);
-        cout<<"shape: "<<shape<<endl;
         if(shape[0]==69){
             game_over(0);
             break;
@@ -210,8 +208,8 @@ int main(int argc, char *argv[]){
             }
         }
     }
-    string filepath="/107062371.txt";
-    gb.print_gameboard();
+    string filepath="/107062371_proj1.txt";
+    gb.print_gameboard(filepath);
     ifile.close();
     return 0;
 }
@@ -247,10 +245,10 @@ int string_to_int(const char *word){
 }
 
 void game_over(int i){
-    if(i)
-        cout<<"---------------GAME OVER------------------"<<endl;
-    else
-        cout<<"---------------End------------------"<<endl;
+    // if(i)
+    //     cout<<"---------------GAME OVER------------------"<<endl;
+    // else
+    //     cout<<"---------------End------------------"<<endl;
     isend= 1;
 }
 
