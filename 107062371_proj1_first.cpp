@@ -18,26 +18,26 @@ class GameBoard{
     public:
         vector<Col> gameboard;
         GameBoard(int n, int m): row(n), col(m){
-            // cout<<"---------------Start------------------"<<endl;
+            cout<<"---------------Start------------------"<<endl;
             new_gameboard(row, col);
         }
         GameBoard(){}
         void new_gameboard(int n, int m){
             gameboard.resize(row, vector<int>(col, 0));
         }
-        void print_gameboard(string filepath){
+        void print_gameboard(){
         // string filepath= "c:\\"+filename+"_output.txt";
-            ofstream ofile(filepath, ios::out);
-            if(ofile.is_open()){
-                ofile<<"gameboard: "<<endl;
+            // ofstream ofile(filepath, ios::out);
+            // if(ofile.is_open()){
+                cout<<"gameboard: "<<endl;
                 for(int i=0; i<row; i++){
                     for(int j= 0; j<col; j++){
-                        ofile<<gameboard[i][j];
+                        cout<<gameboard[i][j];
                     }
-                    ofile<<endl;
+                    cout<<endl;
                 }
-                ofile<<endl;
-                }
+                cout<<endl;
+            // }
         }
         void bomb_gameboard(int i){
                 vector<Col> tmp= gameboard;
@@ -151,6 +151,7 @@ int main(int argc, char *argv[]){
     ifile.getline(col, sizeof(col), '\n');
     int rowi= string_to_int(row);
     int coli= string_to_int(col);
+    cout<<rowi<<coli<<endl;
     GameBoard gb(rowi, coli);
     Table table(rowi, coli, gb.gameboard);
     
@@ -160,6 +161,7 @@ int main(int argc, char *argv[]){
             break;
         //load in block   
         read_file(shape, pos1, pos2, &ifile);
+        cout<<"shape: "<<shape<<endl;
         if(shape[0]==69){
             game_over(0);
             break;
@@ -208,8 +210,8 @@ int main(int argc, char *argv[]){
             }
         }
     }
-    string filepath="/Users/exosite/Desktop/enyu/data/teris/Teris-battle/test.txt";
-    gb.print_gameboard(filepath);
+    string filepath="/107062371.txt";
+    gb.print_gameboard();
     ifile.close();
     return 0;
 }
@@ -245,10 +247,10 @@ int string_to_int(const char *word){
 }
 
 void game_over(int i){
-    // if(i)
-    //     cout<<"---------------GAME OVER------------------"<<endl;
-    // else
-    //     cout<<"---------------End------------------"<<endl;
+    if(i)
+        cout<<"---------------GAME OVER------------------"<<endl;
+    else
+        cout<<"---------------End------------------"<<endl;
     isend= 1;
 }
 
@@ -344,7 +346,7 @@ Map Block:: create_hitset(){
                             }
                             case(3):{
                                 for(int i= 0; i<3; i++)
-                                    for(int j= 1; j<=pos2; pos2++){
+                                    for(int j= 1; j<=pos2; j++){
                                         hitset.insert(Pair(pos1+1+j, bottom1+i));
                                     }
                                 break;
@@ -763,8 +765,8 @@ int Table::get_bottom(int pos1,  char *kind){
                 case(3):{
                     int x;
                     x= nonzerotable[++pos1].size()-1;
-                    if(nonzerotable[pos1][x]-2 >bottom)
-                        bottom= nonzerotable[pos1][x]-2;;
+                    if(nonzerotable[pos1][x]+2 >bottom)
+                        bottom= nonzerotable[pos1][x]+2;
                     break;
                 }
                 case(4):{
@@ -833,8 +835,8 @@ int Table::get_bottom(int pos1,  char *kind){
                 case(3):{
                     int x;
                     x= nonzerotable[++pos1].size()-1;
-                    if(nonzerotable[pos1][x]-1 >bottom)
-                        bottom= nonzerotable[pos1][x]-1;
+                    if(nonzerotable[pos1][x] >bottom)
+                        bottom= nonzerotable[pos1][x];
                     else{
                          x= nonzerotable[++pos1].size()-1;
                         if(nonzerotable[pos1][x] >bottom)
@@ -1053,9 +1055,9 @@ void Table::update_table(Block block, int bottom1){
                                     ++bombtable[bottom2];
                                     gameboard[(row-1)-(bottom2)][pos+j]= 1;
                                 }
-                                nonzerotable[pos+2].emplace_back(bottom2-1);
-                                ++bombtable[bottom2-1];
-                                gameboard[(row-1)-(bottom2-1)][pos+2]= 1;
+                                nonzerotable[pos+2].emplace_back(bottom2+1);
+                                ++bombtable[bottom2+1];
+                                gameboard[(row-1)-(bottom2+1)][pos+2]= 1;
                             }
                             break;
                         }
