@@ -1,1 +1,4 @@
-./testcase*
+testcase*
+.DS_Store
+.
+..
