@@ -1,8 +1,7 @@
-# Teris-battle
 # Teris Battle Result Prediction
 
 ### Description
-The goal of this project is to predict the result after input blocks on the game board.
+The goal of this project is to predict the result after input blocks on the game board.:battery: 
 
 ### Main flow chart
 ![](https://i.imgur.com/mE1wNXF.png)
